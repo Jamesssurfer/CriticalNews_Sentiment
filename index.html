@@ -7,7 +7,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<!-- Vendored in vendor/chart.umd.js rather than loaded from a CDN -- a CDN
+     (cdnjs.cloudflare.com) was silently blocked on a real network, with no
+     visible error to the person just looking at the page: the chart area
+     just stayed blank. Self-hosting removes that failure mode entirely. -->
+<script src="vendor/chart.umd.js"></script>
 <style>
   :root {
     --bg: #14161c;
@@ -77,14 +81,14 @@
 <body>
 <header>
   <h1>Macro &amp; geopolitical risk sentiment</h1>
-  <p>Last scan: 2026-09-13T23:22:51+00:00 UTC · Positive score = escalating pressure · Negative = de-escalating</p>
+  <p>Last scan: 2026-09-13T23:36:53+00:00 UTC · Positive score = escalating pressure · Negative = de-escalating</p>
 </header>
 <main>
   
     <section class="panel" style="--accent: #C1524B">
       <div class="panel-head">
         <h2>Middle East Oil Risk</h2>
-        <span class="timestamp">as of 2026-09-13T23:22:51+00:00</span>
+        <span class="timestamp">as of 2026-09-13T23:36:53+00:00</span>
       </div>
 
       <div class="score-row">
@@ -103,16 +107,16 @@
         </div>
       </div>
 
-      <span class="label chart-label">Composite score, last 4 runs (~4 days)</span>
-      <canvas class="trend-chart" id="chart-782" height="120"></canvas>
+      <span class="label chart-label">Composite score, last 5 runs (~4 days)</span>
+      <canvas class="trend-chart" id="chart-98310" height="120"></canvas>
       <script>
-        new Chart(document.getElementById("chart-782"), {
+        new Chart(document.getElementById("chart-98310"), {
           type: "line",
           data: {
-            labels: ["09-13 18h", "09-13 22h", "09-13 23h", "09-13 23h"],
+            labels: ["09-13 18h", "09-13 22h", "09-13 23h", "09-13 23h", "09-13 23h"],
             datasets: [
               {
-                data: [-15.202, -15.434, 22.001, 22.001],
+                data: [-15.202, -15.434, 22.001, 22.001, 22.001],
                 borderColor: "#C1524B",
                 borderWidth: 1.5,
                 pointRadius: 2,
@@ -121,7 +125,7 @@
                 fill: false,
               },
               {
-                data: [0, 0, 0, 0],
+                data: [0, 0, 0, 0, 0],
                 borderColor: "#8a8f9c",
                 borderWidth: 1,
                 borderDash: [4, 4],
@@ -153,7 +157,7 @@
         <span class="label">Top risk headlines this run</span>
         <ul><li><a href="https://news.google.com/rss/articles/CBMiWkFVX3lxTFByamU5TjBFcHB1R2ZhQ0UtQ2pKTHY1Y09IQ045YlRBNEtMUjV3MVJISGdMZ0dLZ0lzTkR3QTRNdGo2ZDBSVFdObXhySXBvNVYyeDBHLXptQXBxUQ?oc=5" target="_blank" rel="noopener">Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians - BBC</a></li>
 <li><a href="https://news.google.com/rss/articles/CBMi8gFBVV95cUxNeWFlc1Zsem1ubmFHWTVtVXpYR0tiam9TYVphN1FzekNHdGUtVTNlRTd5OFBhQkFPNm5oMUpSUVItVjNHY3A1N3Bib1c1Qy04SzJKbUZ2UFZhU3dROGxIWnlzQ1BuNXgxWmpUSnFuRFBQbnBncHZldV9Uckw5Sl9NTzlIbVBpZExHTGYwMk1sb0tLYW1NRDNmaVZ1MjBvb244U3BnazNqWHdKTWktLTB1QWh1dGVvQVR0MmdnTEVlbmlkTUh0aW5wRHc4bWJZc1FWeGJLUXI0TDJsR21oS29NcXluWmw0N3JZd3FULW82ZWQ1QQ?oc=5" target="_blank" rel="noopener">USA/Israel/Iran: Investigation into US-Israeli strikes on Tehran neighbourhoods reveals devastating civilian harm - Amnesty International</a></li>
-<li><a href="https://news.google.com/rss/articles/CBMinAFBVV95cUxObk5EbElublhva1o0aEYxbmpnTFB1aEU1dTNvenR2eHJndXFvYjVTTFJmYk5EQWpSVXdlaXhiM2lFeks5aFh6M1hQd2hJSDgwRXB1b3ducmllX19mam9CRFRjN0dlQVp5ak1QaEphcE8wUXpkYW4xUS1JYWpiTDJvcS1EOHduTjN5OWJWNy11anpKMlVoYlgtM2dwNGnSAaIBQVVfeXFMT0FyOVVHZVpXUUtqTWpKZ0hYdnVEZ1FhWTRWNk44bnZlS2Y2dkV5VTVGZjVYbm94MXcwMzN4TUY5YXBPX05qUUM2Q09sM3BYYl9uWlVFcmZsbmFCMjhCZE11bEN3bmt5VFpVdmdybHFfSExucWpXSVpZNVZjQTVOOFZIdXI3VWVvdjdsV1o2b1doQk9ZT0NxUldDTEdaRmZ3Mjh3?oc=5" target="_blank" rel="noopener">Israel-Hezbollah clashes kill 11 as Mideast conflict escalation gathers pace after U.S.-Iran strikes - cnbc.com</a></li></ul>
+<li><a href="https://news.google.com/rss/articles/CBMinAFBVV95cUxObk5EbElublhva1o0aEYxbmpnTFB1aEU1dTNvenR2eHJndXFvYjVTTFJmYk5EQWpSVXdlaXhiM2lFeks5aFh6M1hQd2hJSDgwRXB1b3ducmllX19mam9CRFRjN0dlQVp5ak1QaEphcE8wUXpkYW4xUS1JYWpiTDJvcS1EOHduTjN5OWJWNy11anpKMlVoYlgtM2dwNGnSAaIBQVVfeXFMT0FyOVVHZVpXUUtqTWpKZ0hYdnVEZ1FhWTRWNk44bnZlS2Y2dkV5VTVGZjVYbm94MXcwMzN4TUY5YXBPX05qUUM2Q09sM3BYYl9uWlVFcmZsbmFCMjhCZE11bEN3bmt5VFpVdmdybHFfSExucWpXSVpZNVZjQTVOOFZIdXI3VWVvdjdsV1o2b1doQk9ZT0NxUldDTEdaRmZ3Mjh3?oc=5" target="_blank" rel="noopener">Israel-Hezbollah clashes kill 11 as Mideast conflict escalation gathers pace after U.S.-Iran strikes - CNBC</a></li></ul>
       </div>
 
       <div class="headlines">
@@ -168,18 +172,18 @@
     <section class="panel" style="--accent: #4C8CA8">
       <div class="panel-head">
         <h2>Macroeconomic Interventions</h2>
-        <span class="timestamp">as of 2026-09-13T23:22:51+00:00</span>
+        <span class="timestamp">as of 2026-09-13T23:36:53+00:00</span>
       </div>
 
       <div class="score-row">
-        <div class="score">-11.71</div>
-        <span class="delta">▲ +0.19 vs prior run</span>
+        <div class="score">-11.91</div>
+        <span class="delta">▼ -0.20 vs prior run</span>
       </div>
 
       <div class="breakdown">
         <div>
           <span class="label">Risk coverage</span>
-          <span class="value">40 articles, tone +0.36 (finbert)</span>
+          <span class="value">40 articles, tone +0.37 (finbert)</span>
         </div>
         <div>
           <span class="label">De-escalation coverage</span>
@@ -187,16 +191,16 @@
         </div>
       </div>
 
-      <span class="label chart-label">Composite score, last 4 runs (~4 days)</span>
-      <canvas class="trend-chart" id="chart-20191" height="120"></canvas>
+      <span class="label chart-label">Composite score, last 5 runs (~4 days)</span>
+      <canvas class="trend-chart" id="chart-77457" height="120"></canvas>
       <script>
-        new Chart(document.getElementById("chart-20191"), {
+        new Chart(document.getElementById("chart-77457"), {
           type: "line",
           data: {
-            labels: ["09-13 18h", "09-13 22h", "09-13 23h", "09-13 23h"],
+            labels: ["09-13 18h", "09-13 22h", "09-13 23h", "09-13 23h", "09-13 23h"],
             datasets: [
               {
-                data: [-11.462, -12.371, -11.899, -11.711],
+                data: [-11.462, -12.371, -11.899, -11.711, -11.91],
                 borderColor: "#4C8CA8",
                 borderWidth: 1.5,
                 pointRadius: 2,
@@ -205,7 +209,7 @@
                 fill: false,
               },
               {
-                data: [0, 0, 0, 0],
+                data: [0, 0, 0, 0, 0],
                 borderColor: "#8a8f9c",
                 borderWidth: 1,
                 borderDash: [4, 4],
@@ -236,15 +240,15 @@
       <div class="headlines">
         <span class="label">Top risk headlines this run</span>
         <ul><li><a href="https://news.google.com/rss/articles/CBMic0FVX3lxTE0tRXluQWxjTDNDS2x2MF9QV01mLTRTTmFSTlg5dHJzWkR3SVhqQjFMT2J2SnB3R25aTnBic0RiejF0Y1Jucm9VOTRCTnJUMFgzTFBHbmw3Q2szaHoyeHlqelpIZjE0UEIwNnZKdzFlTE5pbjQ?oc=5" target="_blank" rel="noopener">Bitcoin posts surprise rally as currency nears $70,000 for the first time since June - Fortune</a></li>
-<li><a href="https://news.google.com/rss/articles/CBMiggFBVV95cUxPaHBSMi1CbElSc0h2SHVfUzQ5MG5LVDhQMjZkb2I2TGtyanpFZGd3R2NxNEptRF91VUx6RVZ1azdzbFdLZFFFVk5vZllKUG94aXJDTi00TmdoOVJacDVkMmc5d1dCMzJQNFJLUjBqQUVOdFdjMkNQZ2doRkNIa0g2SjV3?oc=5" target="_blank" rel="noopener">PBOC injects 50b yuan through treasury bond operations in May - China Daily Global Edition</a></li>
-<li><a href="https://news.google.com/rss/articles/CBMiekFVX3lxTE15VVpBTkVBeTZma01udk9OaEI2OXNJT1ZWQU9NMEp2Ui10UVR2RHNpM3dEOFVZOHo4REN5bXlwU1hKZlhNV0s4QlBycy1PQlgwdjRnSkhDYm9EUDV1QTlpSU1rNDkxaS1EdnUwQjBYeGtBZDFKTG9PUkNB?oc=5" target="_blank" rel="noopener">UAE injects $8bn into banking system as liquidity falls - TheBanker.com</a></li></ul>
+<li><a href="https://news.google.com/rss/articles/CBMiekFVX3lxTE15VVpBTkVBeTZma01udk9OaEI2OXNJT1ZWQU9NMEp2Ui10UVR2RHNpM3dEOFVZOHo4REN5bXlwU1hKZlhNV0s4QlBycy1PQlgwdjRnSkhDYm9EUDV1QTlpSU1rNDkxaS1EdnUwQjBYeGtBZDFKTG9PUkNB?oc=5" target="_blank" rel="noopener">UAE injects $8bn into banking system as liquidity falls - TheBanker.com</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMiggFBVV95cUxPaHBSMi1CbElSc0h2SHVfUzQ5MG5LVDhQMjZkb2I2TGtyanpFZGd3R2NxNEptRF91VUx6RVZ1azdzbFdLZFFFVk5vZllKUG94aXJDTi00TmdoOVJacDVkMmc5d1dCMzJQNFJLUjBqQUVOdFdjMkNQZ2doRkNIa0g2SjV3?oc=5" target="_blank" rel="noopener">PBOC injects 50b yuan through treasury bond operations in May - global.chinadaily.com.cn</a></li></ul>
       </div>
 
       <div class="headlines">
         <span class="label">Top de-escalation headlines this run</span>
         <ul><li><a href="https://news.google.com/rss/articles/CBMirAFBVV95cUxPOV9SSUVsVXpWaGF0dlFKVmlYTlVkWUhEZ2xuSXdjVjhyNWZBcFdoY0duYmdMMVg2TFFfVEFJTlFTY2dXU1UtSXp1cE9yWkF0Tm1Fa0JZRjlfU211clhDbjBESGpBNmRRMFptNmNSQXhsd3BsSU1GWUZsaVJyZVVvWFVpSjNQSTB0LS1rcy1OallrdzM0QmdEZjhJTVFGblNNZXNzX3dKaU1fcnNh?oc=5" target="_blank" rel="noopener">USD/JPY outlook: BOJ holds steady as intervention risk builds - stonex.com</a></li>
 <li><a href="https://news.google.com/rss/articles/CBMi0wFBVV95cUxPbDlfMnNhM0xLMkNKVW5NdUY4Rl9TUEJJb1djRXBhb1FERjFReGJEaTFYRTNWamxBUG5LRVpmZE9KSkI1dEJ1VlJLLWtDSGdvRl9FbzRaeHBmQnlwbWxGbmFQa254THo4Mlk0amM2Q2liYzVsSWpDVnNEdE1vMExhZmotLVZDcV9qeS16ZVpsbmFSUlcweDMyZDh4VmZheXRHUGVGRGFFby1qcG0yT0pfSUFyMUQ1OTZpZHdKNWc1S2dkblB2MThFWFhIcFNKVmFQUzJV?oc=5" target="_blank" rel="noopener">Could Fed Adjust Rates Ahead of Midterm Elections? Here’s a Historical Guide - CME Group</a></li>
-<li><a href="https://news.google.com/rss/articles/CBMie0FVX3lxTE9GZTdvcXVuWGZqaElXMlNKcTUxT0N1c0hSeDQ5d2Z3dERpZHlwVnpRVzZXb2FaRHhEWTdsWDVhSXAxaUJvRklSckUyTzdyZ0YzRE1CNDVuY3dSQkJ5M3habTlJdTdqTDN5WlJkSG1yc1ZLTDV1X0ZDaHVaWQ?oc=5" target="_blank" rel="noopener">Shirai Sees BOJ Policy Still Dovish Even After Ueda Delivers What Many See as Hawkish Hold - Kathleen Hays Presents: Central Bank Central</a></li></ul>
+<li><a href="https://news.google.com/rss/articles/CBMihwFBVV95cUxOT2gxejhKMWQ2Z0xyRmJyNUxieFRZUmtQZXcyazh5REJjRExVN1VINFZmZVhiZkxXRVp4TmoxWWlWQWRrVktrcDM1TmtRRkltcDZPM1pNOXFFcGlnaEpKenpyM0IyNXVMT3dVMU90ZnU3bnZ1WTduMDJxcy11OExIZWNiVGh0aU0?oc=5" target="_blank" rel="noopener">Experts Predict No Fed Rate Cut Next Week: What It Means - Newsweek</a></li></ul>
       </div>
     </section>
     
@@ -252,18 +256,18 @@
     <section class="panel" style="--accent: #C89B3C">
       <div class="panel-head">
         <h2>Trade Wars & Escalations</h2>
-        <span class="timestamp">as of 2026-09-13T23:22:51+00:00</span>
+        <span class="timestamp">as of 2026-09-13T23:36:53+00:00</span>
       </div>
 
       <div class="score-row">
-        <div class="score">+8.56</div>
-        <span class="delta">▼ -0.03 vs prior run</span>
+        <div class="score">+8.62</div>
+        <span class="delta">▲ +0.06 vs prior run</span>
       </div>
 
       <div class="breakdown">
         <div>
           <span class="label">Risk coverage</span>
-          <span class="value">40 articles, tone -0.28 (vader)</span>
+          <span class="value">40 articles, tone -0.29 (vader)</span>
         </div>
         <div>
           <span class="label">De-escalation coverage</span>
@@ -271,16 +275,16 @@
         </div>
       </div>
 
-      <span class="label chart-label">Composite score, last 4 runs (~4 days)</span>
-      <canvas class="trend-chart" id="chart-47343" height="120"></canvas>
+      <span class="label chart-label">Composite score, last 5 runs (~4 days)</span>
+      <canvas class="trend-chart" id="chart-34545" height="120"></canvas>
       <script>
-        new Chart(document.getElementById("chart-47343"), {
+        new Chart(document.getElementById("chart-34545"), {
           type: "line",
           data: {
-            labels: ["09-13 18h", "09-13 22h", "09-13 23h", "09-13 23h"],
+            labels: ["09-13 18h", "09-13 22h", "09-13 23h", "09-13 23h", "09-13 23h"],
             datasets: [
               {
-                data: [-19.38, -19.464, 8.595, 8.562],
+                data: [-19.38, -19.464, 8.595, 8.562, 8.617],
                 borderColor: "#C89B3C",
                 borderWidth: 1.5,
                 pointRadius: 2,
@@ -289,7 +293,7 @@
                 fill: false,
               },
               {
-                data: [0, 0, 0, 0],
+                data: [0, 0, 0, 0, 0],
                 borderColor: "#8a8f9c",
                 borderWidth: 1,
                 borderDash: [4, 4],
@@ -326,9 +330,9 @@
 
       <div class="headlines">
         <span class="label">Top de-escalation headlines this run</span>
-        <ul><li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTFBxMXZiaDRSYmJGVHdNanpCeUNfaHdPdGlTQ0ZJRENHb2FkV0I1cHAxMzgwLW5vcllLellvNEowQWxSTXA0QlI4VnhPWTNXY1ZIQTVFZDEyQVUtVDFnLXFQUFlHYndKdHhBQmhFSQ?oc=5" target="_blank" rel="noopener">Failing to Renew the USMCA Would Increase Tariff Uncertainty and Harm Americans - Tax Foundation</a></li>
+        <ul><li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTFBxMXZiaDRSYmJGVHdNanpCeUNfaHdPdGlTQ0ZJRENHb2FkV0I1cHAxMzgwLW5vcllLellvNEowQWxSTXA0QlI4VnhPWTNXY1ZIQTVFZDEyQVUtVDFnLXFQUFlHYndKdHhBQmhFSQ?oc=5" target="_blank" rel="noopener">Failing to Renew the USMCA Would Increase Tariff Uncertainty and Harm Americans - taxfoundation.org</a></li>
 <li><a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxOcHB5eDNncFdaak9CYlEwR05UeVNKMlhUYTJwMHJtWmxSYTI5R1JzbmtGMk4zUTVOR3NDZWpkQ0gtaEpVZXJaY0NFc2JhQUFXRHFzRk9vU0ZkTEpxanhvSlBtbTVxUlVWMlpqV3d4RDNDdFp2Q19SbWFUQUFlVkVyMks3WFQ0ektTZXJQZnNQaTNWaDl3bVZnTWhEN3lFMVVyRnBHZA?oc=5" target="_blank" rel="noopener">Trump readies new tariff to punish China for flood of cheap exports—without risking his trade truce - Fortune</a></li>
-<li><a href="https://news.google.com/rss/articles/CBMinwFBVV95cUxOaElLTzZISkhGRzh3ZFZYbGcxZ21jTHozWXpwM3U1X0N4cXlYRFBpZFczX2E2ZENwdmQ4ZF9abEJfdHc2QmNvOHdUQVJkS1hIOVZhM2Fza0NjQ053TU0xNmdSOWFMUmxBOVA4dHAxZzdZUXZjTEVUSVU4WW9UZ0N6ai1pZHlwRUFnUk5JZDdLcWtrakNaS29xM2xOY2dIeG8?oc=5" target="_blank" rel="noopener">China says it hopes to agree with the US on tariff reductions at ‘an early date’ - AP News</a></li></ul>
+<li><a href="https://news.google.com/rss/articles/CBMinwFBVV95cUxOaElLTzZISkhGRzh3ZFZYbGcxZ21jTHozWXpwM3U1X0N4cXlYRFBpZFczX2E2ZENwdmQ4ZF9abEJfdHc2QmNvOHdUQVJkS1hIOVZhM2Fza0NjQ053TU0xNmdSOWFMUmxBOVA4dHAxZzdZUXZjTEVUSVU4WW9UZ0N6ai1pZHlwRUFnUk5JZDdLcWtrakNaS29xM2xOY2dIeG8?oc=5" target="_blank" rel="noopener">China says it hopes to agree with the US on tariff reductions at ‘an early date’ - apnews.com</a></li></ul>
       </div>
     </section>
     
