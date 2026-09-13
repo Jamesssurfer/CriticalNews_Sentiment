@@ -24,7 +24,12 @@ HEADERS = [
     "top_headline_1", "top_headline_1_url",
     "top_headline_2", "top_headline_2_url",
     "top_headline_3", "top_headline_3_url",
-    "sentiment_model_used",  # appended at the end on purpose -- see _migrate_headers
+    "sentiment_model_used",
+    # Appended at the end, same reason as sentiment_model_used above: never
+    # insert a new column mid-schema, it desyncs every row already on disk.
+    "deescalation_top_headline_1", "deescalation_top_headline_1_url",
+    "deescalation_top_headline_2", "deescalation_top_headline_2_url",
+    "deescalation_top_headline_3", "deescalation_top_headline_3_url",
 ]
 
 
@@ -136,7 +141,8 @@ def run_scan():
             len(deescalation_articles), deescalation_active_avg,
         )
 
-        top3 = _top_headlines(risk_articles, model, 3)
+        risk_top3 = _top_headlines(risk_articles, model, 3)
+        deescalation_top3 = _top_headlines(deescalation_articles, model, 3)
 
         row = [
             timestamp, date_str, bucket["label"],
@@ -144,9 +150,11 @@ def run_scan():
             len(deescalation_articles), round(deescalation_finbert_avg, 3), round(deescalation_vader_avg, 3),
             composite,
         ]
-        for h in top3:
+        for h in risk_top3:
             row.extend([h.get("title", ""), h.get("link", "")])
         row.append(model)
+        for h in deescalation_top3:
+            row.extend([h.get("title", ""), h.get("link", "")])
 
         ws.append(row)
         print(
