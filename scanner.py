@@ -17,13 +17,14 @@ LOG_PATH = Path(__file__).parent / "data" / "sentiment_log.xlsx"
 LOG_SHEET = "Log"
 
 HEADERS = [
-    "timestamp_utc", "date", "bucket", "sentiment_model_used",
+    "timestamp_utc", "date", "bucket",
     "risk_articles", "risk_finbert_avg", "risk_vader_avg",
     "deescalation_articles", "deescalation_finbert_avg", "deescalation_vader_avg",
     "composite_score",
     "top_headline_1", "top_headline_1_url",
     "top_headline_2", "top_headline_2_url",
     "top_headline_3", "top_headline_3_url",
+    "sentiment_model_used",  # appended at the end on purpose -- see _migrate_headers
 ]
 
 
@@ -62,6 +63,32 @@ def _top_headlines(articles: list[dict], score_key: str, n: int = 3) -> list[dic
     return padded
 
 
+def _migrate_headers(ws):
+    """If this file predates a column that HEADERS now defines, add it to the
+    header row only -- existing data rows are left untouched, so old rows just
+    read as blank/NaN in the new trailing column. This only ever appends new
+    columns at the end; it never reorders or renames one, because doing that
+    silently is exactly what caused the last bug (a column inserted in the
+    middle desynced the header row from data rows already on disk).
+
+    If the existing header doesn't even match as a prefix of HEADERS, something
+    more unusual has happened to the file -- fail loudly rather than guess.
+    """
+    existing = [c.value for c in ws[1]] if ws.max_row >= 1 else []
+    if existing == HEADERS:
+        return
+    if existing and HEADERS[: len(existing)] == existing:
+        for i, header in enumerate(HEADERS[len(existing):], start=len(existing) + 1):
+            ws.cell(row=1, column=i, value=header)
+    else:
+        raise RuntimeError(
+            "data/sentiment_log.xlsx header row doesn't match the expected schema "
+            "-- this needs a manual look before more rows get appended.\n"
+            f"  Found:    {existing}\n"
+            f"  Expected: {HEADERS}"
+        )
+
+
 def _ensure_workbook():
     LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
     if LOG_PATH.exists():
@@ -69,6 +96,8 @@ def _ensure_workbook():
         if LOG_SHEET not in wb.sheetnames:
             ws = wb.create_sheet(LOG_SHEET)
             ws.append(HEADERS)
+        else:
+            _migrate_headers(wb[LOG_SHEET])
     else:
         wb = Workbook()
         ws = wb.active
@@ -110,13 +139,14 @@ def run_scan():
         top3 = _top_headlines(risk_articles, model, 3)
 
         row = [
-            timestamp, date_str, bucket["label"], model,
+            timestamp, date_str, bucket["label"],
             len(risk_articles), round(risk_finbert_avg, 3), round(risk_vader_avg, 3),
             len(deescalation_articles), round(deescalation_finbert_avg, 3), round(deescalation_vader_avg, 3),
             composite,
         ]
         for h in top3:
             row.extend([h.get("title", ""), h.get("link", "")])
+        row.append(model)
 
         ws.append(row)
         print(
