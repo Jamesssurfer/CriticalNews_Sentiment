@@ -213,7 +213,11 @@ def build_dashboard():
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<!-- Vendored in vendor/chart.umd.js rather than loaded from a CDN -- a CDN
+     (cdnjs.cloudflare.com) was silently blocked on a real network, with no
+     visible error to the person just looking at the page: the chart area
+     just stayed blank. Self-hosting removes that failure mode entirely. -->
+<script src="vendor/chart.umd.js"></script>
 <style>
   :root {{
     --bg: #14161c;
