@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Macro & Geopolitical Risk Sentiment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #14161c;
+    --panel: #1b1e27;
+    --text: #e7e5de;
+    --muted: #8a8f9c;
+    --rule: #2a2e3a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "IBM Plex Sans", -apple-system, sans-serif;
+    line-height: 1.5;
+  }
+  .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  header {
+    padding: 2rem 1.5rem 1rem;
+    max-width: 880px;
+    margin: 0 auto;
+    border-bottom: 1px solid var(--rule);
+  }
+  header h1 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0 0 0.3rem;
+  }
+  header p { color: var(--muted); margin: 0; font-size: 0.9rem; }
+  main { max-width: 880px; margin: 0 auto; padding: 1.5rem; }
+  .panel {
+    background: var(--panel);
+    border-left: 3px solid var(--accent, var(--muted));
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .panel-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; }
+  .panel-head h2 { font-size: 1.05rem; margin: 0; font-weight: 600; }
+  .timestamp { color: var(--muted); font-size: 0.8rem; }
+  .score-row { display: flex; align-items: baseline; gap: 0.75rem; margin: 0.6rem 0; }
+  .score { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 2.1rem; font-weight: 600; }
+  .delta { color: var(--muted); font-size: 0.85rem; }
+  .breakdown { display: flex; flex-direction: column; gap: 0.25rem; margin-bottom: 0.75rem; font-size: 0.88rem; }
+  .breakdown .label { color: var(--muted); margin-right: 0.5rem; }
+  .breakdown .value { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+  .sparkline { width: 100%; max-height: 70px; margin: 0.5rem 0 0.75rem; }
+  .headlines .label { color: var(--muted); font-size: 0.8rem; display: block; margin-bottom: 0.3rem; }
+  .headlines ul { margin: 0; padding-left: 1.1rem; font-size: 0.9rem; }
+  .headlines li { margin-bottom: 0.25rem; }
+  .headlines a { color: var(--text); text-decoration: none; border-bottom: 1px solid var(--rule); }
+  .headlines a:hover { border-bottom-color: var(--text); }
+  .muted { color: var(--muted); }
+  .small { font-size: 0.8rem; }
+  table.daily-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 0.5rem; }
+  table.daily-table th, table.daily-table td {
+    text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--rule);
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  table.daily-table th { font-family: "IBM Plex Sans", sans-serif; color: var(--muted); font-weight: 500; }
+  footer { max-width: 880px; margin: 0 auto; padding: 1rem 1.5rem 2.5rem; color: var(--muted); font-size: 0.78rem; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Macro &amp; geopolitical risk sentiment</h1>
+  <p>Last scan: 2026-09-13T18:14:49+00:00 UTC · Positive score = escalating pressure · Negative = de-escalating</p>
+</header>
+<main>
+  
+    <section class="panel" style="--accent: #C1524B">
+      <div class="panel-head">
+        <h2>Middle East Oil Risk</h2>
+        <span class="timestamp">as of 2026-09-13T18:14:49+00:00</span>
+      </div>
+
+      <div class="score-row">
+        <div class="score">-15.20</div>
+        
+      </div>
+
+      <div class="breakdown">
+        <div>
+          <span class="label">Risk coverage</span>
+          <span class="value">46 articles, tone +0.48</span>
+        </div>
+        <div>
+          <span class="label">De-escalation coverage</span>
+          <span class="value">31 articles, tone +0.75</span>
+        </div>
+      </div>
+
+      <canvas class="sparkline" id="chart-45016" height="70"></canvas>
+      <script>
+        new Chart(document.getElementById("chart-45016"), {
+          type: "line",
+          data: {
+            labels: ["2026-09-13T18:14:49+00:00"],
+            datasets: [{
+              data: [-15.202],
+              borderColor: "#C1524B",
+              borderWidth: 1.5,
+              pointRadius: 0,
+              tension: 0.15,
+              fill: false,
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false }, tooltip: { enabled: false } },
+            scales: { x: { display: false }, y: { display: false } },
+            elements: { point: { radius: 0 } },
+          }
+        });
+      </script>
+
+      <div class="headlines">
+        <span class="label">Top headlines this run</span>
+        <ul><li><a href="https://news.google.com/rss/articles/CBMipwFBVV95cUxQREtMT2VSSC1lYklMdzV1UHJXZWxZdGFjc1VLSkZDSVJFR2F5V05jTUU4aVNwYVY4Qm5hTF81a1hPOG1rb0tlOGp6aVl1amhQQURpQ1N0VWtzLTN2OTROcTMtVmR5OG9QYVY2a3hDa1FoUElLbTdRcXM3Z3ZWb3ZQMGswY204dURSOHBUcGdZakZBOUdfWFltTnJXWjdnWGtsZ3lTWFVTSdIBrAFBVV95cUxQNU5JWVZ0TzIyN2xmeG1DaWFrVXZDQnJYSXFJSHY4MzcxRkVFal9HWXFSVHJLTnVUOGM4U1NkRGtQMlVKM21FblNDQ2JPWWw1RWpvZnJ1b2x3SUd4VmNCclBrMkZoMExVblVzV0g2dWhnUjlCMjBpMlhNdFQ4bzMyOVpVcnlXZERvSG1DeEpCV0RsVW5YNnNtVFc0Q0huak9wNHJ5VHU2aTlRSUtP?oc=5" target="_blank" rel="noopener">Can the Houthis close the Red Sea after seizing the Yemen coast? - Al Jazeera</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMiogFBVV95cUxObTVyYjgxZ2dKZHRSMkhGMkJWaDB1MUF6X3hySExZMWlSbldNYk14TVYwTkFUWnhXdy1OY0NjdG5Ea3BIRDh1TXJGU29jVjh0MDhROERGMkY4T05EUjdvYmhteVNTMU5CaXVBSERNWFNVd21COEhmdVQyTUJIVWtSVm51SDlsRmtqN3ZlUWxzQjlUdF9qQXFiWE5qVWxvNUtnYkHSAacBQVVfeXFMT2JpMDFEYlZlbzdvOXZUNzAyT2cwWmhlX3hRMG9ULXJCR0pjd0k5T1RHNkdBTVZxMmZmQkNhbXhjVjFwclZ3Wkk1WUVxNkpMeGRaWjJDRjJUMXFNRExHNGNWaTY4RVVJMS1ENldLLWhWRnlNWmtYa2RlTVNHXy1TV0ZEbzhrZjFSUEtLMXNMUC0xS2MyN3dfWldmVDQxTVFZV3RlaWxFYUE?oc=5" target="_blank" rel="noopener">Houthi advance in Yemen is about more than just the Red Sea - Al Jazeera</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMiWkFVX3lxTFBtUTBldk5ZbDBRTF9rN0o3bHNMWGtaRUp1R2xlSDJWSThBc1VSc2NGc2hLMDZMZVFnUE1FTTJSNzM4VG01WFlKMnRWaGlIdGVfeW1aZHNGRi1yZw?oc=5" target="_blank" rel="noopener">Yemen's Houthis seize strategic Red Sea port of Mokha - bbc.com</a></li></ul>
+      </div>
+    </section>
+    
+
+    <section class="panel" style="--accent: #4C8CA8">
+      <div class="panel-head">
+        <h2>Macroeconomic Interventions</h2>
+        <span class="timestamp">as of 2026-09-13T18:14:49+00:00</span>
+      </div>
+
+      <div class="score-row">
+        <div class="score">-11.46</div>
+        
+      </div>
+
+      <div class="breakdown">
+        <div>
+          <span class="label">Risk coverage</span>
+          <span class="value">40 articles, tone +0.39</span>
+        </div>
+        <div>
+          <span class="label">De-escalation coverage</span>
+          <span class="value">32 articles, tone +0.48</span>
+        </div>
+      </div>
+
+      <canvas class="sparkline" id="chart-35097" height="70"></canvas>
+      <script>
+        new Chart(document.getElementById("chart-35097"), {
+          type: "line",
+          data: {
+            labels: ["2026-09-13T18:14:49+00:00"],
+            datasets: [{
+              data: [-11.462],
+              borderColor: "#4C8CA8",
+              borderWidth: 1.5,
+              pointRadius: 0,
+              tension: 0.15,
+              fill: false,
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false }, tooltip: { enabled: false } },
+            scales: { x: { display: false }, y: { display: false } },
+            elements: { point: { radius: 0 } },
+          }
+        });
+      </script>
+
+      <div class="headlines">
+        <span class="label">Top headlines this run</span>
+        <ul><li><a href="https://news.google.com/rss/articles/CBMic0FVX3lxTE0tRXluQWxjTDNDS2x2MF9QV01mLTRTTmFSTlg5dHJzWkR3SVhqQjFMT2J2SnB3R25aTnBic0RiejF0Y1Jucm9VOTRCTnJUMFgzTFBHbmw3Q2szaHoyeHlqelpIZjE0UEIwNnZKdzFlTE5pbjQ?oc=5" target="_blank" rel="noopener">Bitcoin posts surprise rally as currency nears $70,000 for the first time since June - Fortune</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMiggFBVV95cUxPaHBSMi1CbElSc0h2SHVfUzQ5MG5LVDhQMjZkb2I2TGtyanpFZGd3R2NxNEptRF91VUx6RVZ1azdzbFdLZFFFVk5vZllKUG94aXJDTi00TmdoOVJacDVkMmc5d1dCMzJQNFJLUjBqQUVOdFdjMkNQZ2doRkNIa0g2SjV3?oc=5" target="_blank" rel="noopener">PBOC injects 50b yuan through treasury bond operations in May - China Daily Global Edition</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMiekFVX3lxTE15VVpBTkVBeTZma01udk9OaEI2OXNJT1ZWQU9NMEp2Ui10UVR2RHNpM3dEOFVZOHo4REN5bXlwU1hKZlhNV0s4QlBycy1PQlgwdjRnSkhDYm9EUDV1QTlpSU1rNDkxaS1EdnUwQjBYeGtBZDFKTG9PUkNB?oc=5" target="_blank" rel="noopener">UAE injects $8bn into banking system as liquidity falls - TheBanker.com</a></li></ul>
+      </div>
+    </section>
+    
+
+    <section class="panel" style="--accent: #C89B3C">
+      <div class="panel-head">
+        <h2>Trade Wars & Escalations</h2>
+        <span class="timestamp">as of 2026-09-13T18:14:49+00:00</span>
+      </div>
+
+      <div class="score-row">
+        <div class="score">-19.38</div>
+        
+      </div>
+
+      <div class="breakdown">
+        <div>
+          <span class="label">Risk coverage</span>
+          <span class="value">40 articles, tone +0.67</span>
+        </div>
+        <div>
+          <span class="label">De-escalation coverage</span>
+          <span class="value">32 articles, tone +0.62</span>
+        </div>
+      </div>
+
+      <canvas class="sparkline" id="chart-99860" height="70"></canvas>
+      <script>
+        new Chart(document.getElementById("chart-99860"), {
+          type: "line",
+          data: {
+            labels: ["2026-09-13T18:14:49+00:00"],
+            datasets: [{
+              data: [-19.38],
+              borderColor: "#C89B3C",
+              borderWidth: 1.5,
+              pointRadius: 0,
+              tension: 0.15,
+              fill: false,
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false }, tooltip: { enabled: false } },
+            scales: { x: { display: false }, y: { display: false } },
+            elements: { point: { radius: 0 } },
+          }
+        });
+      </script>
+
+      <div class="headlines">
+        <span class="label">Top headlines this run</span>
+        <ul><li><a href="https://news.google.com/rss/articles/CBMixgJBVV95cUxQZUFsVEIwT0djR2lFTTEwcFJyMXhYbVNuTHVIcWdibXFZUUlBbzNGOWVyVXNnZHhmczFuc1E5bTdaZHNEaC1ZcHJFUmhyS1hhYzV5Y0Y3aC1IQjFmZVluVWhOSXlGYkdIYWMtVTJieFNOdHQzMlAzNHBhek9QajJrS0V3YTVPdTBtTlliazYxTWR2dm5rZkdXbG1LR09Ja2VvWEFmakxSY1FRS01CbFVyRER5NXo3UW9UaXN3ZEUycmFMT2xUVW40aFF0c01FVXk1WlVhcDdIV3JmSjFsN1ViZ1Y1WEpzcnl5RmQ1VlpIcnVNY0tXX2RxWnFfU0syN3haQTBISWFQV2Uwc2JPODJVc2lPeFJRTDA0TWVvczk1eGVrUzdlVFZ2eEtMZURXeHgtNkx3cVA2TE1sYUJZMVppd05wanlWUQ?oc=5" target="_blank" rel="noopener">China's AI accelerator supplier Biren posts 2,000% year-over-year revenue growth — US export controls benefit homegrown chips as Nvidia and AMD exit market - Tom's Hardware</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMifEFVX3lxTFBZMDY3TVNCdDRkUURTVjFlUVVybWgwR2U5bmM3VHNVLVl6T09NR210S3hILWhYTUVkQlZ3VF92clV6czgxYW9PaWxQdlQ0ZGlmVVVpbUl1aW5sNmJlXzcyZnZHRFZEUUpzWm9sU2pWQ0ZwZUVGV1hhWVBYNGc?oc=5" target="_blank" rel="noopener">Strengthening the U.S. Export Control Regime - The Foundation for American Innovation</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMicEFVX3lxTFA3STlnT1E2aUIyX2JpeEFudzFKY290X0lPMU9lUDBwMTRXQ18yOVk0d1pYckszbGJ3MDVkakVBNHFFdW94N25jcUM3SHZRNnJBbHdkUWF4Q3BMQWFOb2s3dVpFaEgwSzd4MzhTYnlWRmI?oc=5" target="_blank" rel="noopener">US-China Tariff Rates - What Are They Now? - China Briefing</a></li></ul>
+      </div>
+    </section>
+    
+  <section class="panel" style="--accent: var(--rule)">
+    <div class="panel-head"><h2>Daily history</h2></div>
+    <p class="muted">No daily rollup yet.</p>
+  </section>
+</main>
+<footer>
+  Generated automatically from sentiment_log.xlsx. Composite score is a v1 heuristic
+  (article volume x tone, risk side minus de-escalation side) -- treat it as a
+  directional read, not a calibrated probability.
+</footer>
+</body>
+</html>
