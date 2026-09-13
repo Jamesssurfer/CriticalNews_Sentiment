@@ -17,7 +17,7 @@ BUCKET_COLORS = {
     "Trade Wars & Escalations": "#C89B3C",
 }
 
-POINTS_PER_SPARKLINE = 42  # ~7 days at 6 runs/day
+POINTS_PER_RUN_CHART = 24  # rolling 4 days at 6 runs/day
 DAILY_ROWS_SHOWN = 14
 
 
@@ -56,17 +56,23 @@ def _bucket_panel_html(bucket: str, log_df: pd.DataFrame) -> str:
     risk_tone = latest["risk_vader_avg"] if model == "vader" else latest["risk_finbert_avg"]
     deesc_tone = latest["deescalation_vader_avg"] if model == "vader" else latest["deescalation_finbert_avg"]
 
-    headlines = []
-    for i in (1, 2, 3):
-        title = latest.get(f"top_headline_{i}", "")
-        url = latest.get(f"top_headline_{i}_url", "")
-        if isinstance(title, str) and title.strip():
-            headlines.append(f'<li><a href="{url}" target="_blank" rel="noopener">{title}</a></li>')
-    headlines_html = "\n".join(headlines) if headlines else "<li class=\"muted\">No articles this run.</li>"
+    def _headline_list(prefix: str) -> str:
+        items = []
+        for i in (1, 2, 3):
+            title = latest.get(f"{prefix}{i}", "")
+            url = latest.get(f"{prefix}{i}_url", "")
+            if isinstance(title, str) and title.strip():
+                items.append(f'<li><a href="{url}" target="_blank" rel="noopener">{title}</a></li>')
+        return "\n".join(items) if items else "<li class=\"muted\">No articles this run.</li>"
 
-    spark = rows.tail(POINTS_PER_SPARKLINE)
-    chart_labels = json.dumps(spark["timestamp_utc"].astype(str).tolist())
-    chart_values = json.dumps([round(float(v), 3) for v in spark["composite_score"].tolist()])
+    risk_headlines_html = _headline_list("top_headline_")
+    deescalation_headlines_html = _headline_list("deescalation_top_headline_")
+
+    chart_rows = rows.tail(POINTS_PER_RUN_CHART)
+    chart_times = pd.to_datetime(chart_rows["timestamp_utc"])
+    chart_labels = json.dumps(chart_times.dt.strftime("%m-%d %Hh").tolist())
+    chart_values = json.dumps([round(float(v), 3) for v in chart_rows["composite_score"].tolist()])
+    zero_line = json.dumps([0] * len(chart_rows))
     canvas_id = f"chart-{abs(hash(bucket)) % 100000}"
 
     return f"""
@@ -92,33 +98,60 @@ def _bucket_panel_html(bucket: str, log_df: pd.DataFrame) -> str:
         </div>
       </div>
 
-      <canvas class="sparkline" id="{canvas_id}" height="70"></canvas>
+      <span class="label chart-label">Composite score, last {len(chart_rows)} runs (~4 days)</span>
+      <canvas class="trend-chart" id="{canvas_id}" height="120"></canvas>
       <script>
         new Chart(document.getElementById("{canvas_id}"), {{
           type: "line",
           data: {{
             labels: {chart_labels},
-            datasets: [{{
-              data: {chart_values},
-              borderColor: "{color}",
-              borderWidth: 1.5,
-              pointRadius: 0,
-              tension: 0.15,
-              fill: false,
-            }}]
+            datasets: [
+              {{
+                data: {chart_values},
+                borderColor: "{color}",
+                borderWidth: 1.5,
+                pointRadius: 2,
+                pointBackgroundColor: "{color}",
+                tension: 0.15,
+                fill: false,
+              }},
+              {{
+                data: {zero_line},
+                borderColor: "#8a8f9c",
+                borderWidth: 1,
+                borderDash: [4, 4],
+                pointRadius: 0,
+                fill: false,
+              }},
+            ]
           }},
           options: {{
             responsive: true,
-            plugins: {{ legend: {{ display: false }}, tooltip: {{ enabled: false }} }},
-            scales: {{ x: {{ display: false }}, y: {{ display: false }} }},
-            elements: {{ point: {{ radius: 0 }} }},
+            plugins: {{ legend: {{ display: false }}, tooltip: {{ enabled: true, mode: "index", intersect: false }} }},
+            scales: {{
+              x: {{
+                display: true,
+                ticks: {{ color: "#8a8f9c", maxTicksLimit: 6, font: {{ family: "IBM Plex Mono", size: 10 }} }},
+                grid: {{ color: "#2a2e3a" }},
+              }},
+              y: {{
+                display: true,
+                ticks: {{ color: "#8a8f9c", font: {{ family: "IBM Plex Mono", size: 10 }} }},
+                grid: {{ color: "#2a2e3a" }},
+              }},
+            }},
           }}
         }});
       </script>
 
       <div class="headlines">
-        <span class="label">Top headlines this run</span>
-        <ul>{headlines_html}</ul>
+        <span class="label">Top risk headlines this run</span>
+        <ul>{risk_headlines_html}</ul>
+      </div>
+
+      <div class="headlines">
+        <span class="label">Top de-escalation headlines this run</span>
+        <ul>{deescalation_headlines_html}</ul>
       </div>
     </section>
     """
@@ -228,7 +261,9 @@ def build_dashboard():
   .breakdown {{ display: flex; flex-direction: column; gap: 0.25rem; margin-bottom: 0.75rem; font-size: 0.88rem; }}
   .breakdown .label {{ color: var(--muted); margin-right: 0.5rem; }}
   .breakdown .value {{ font-family: "IBM Plex Mono", ui-monospace, monospace; }}
-  .sparkline {{ width: 100%; max-height: 70px; margin: 0.5rem 0 0.75rem; }}
+  .chart-label {{ display: block; margin-top: 0.5rem; }}
+  .trend-chart {{ width: 100%; max-height: 140px; margin: 0.4rem 0 1rem; }}
+  .headlines {{ margin-top: 1rem; }}
   .headlines .label {{ color: var(--muted); font-size: 0.8rem; display: block; margin-bottom: 0.3rem; }}
   .headlines ul {{ margin: 0; padding-left: 1.1rem; font-size: 0.9rem; }}
   .headlines li {{ margin-bottom: 0.25rem; }}
