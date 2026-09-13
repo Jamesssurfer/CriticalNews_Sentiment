@@ -12,6 +12,23 @@ return fewer articles -- that reads as "quiet," not "improving." deescalation_qu
 give the scanner a way to detect and score actual de-escalation (ceasefires, rate
 cuts, tariff rollbacks) instead of just an absence of bad news. See composite score
 logic in scanner.py.
+
+Each bucket also picks which scoring model drives its composite score, via
+"sentiment_model": "finbert" or "vader". Both models are still run and logged for
+every bucket (see sentiment_engine.py) -- this only controls which number the
+composite formula and the top-headlines ranking actually use.
+
+Default choice, based on checking real output from both models on the same
+headlines: FinBERT is trained on financial-phrasebank / analyst-report language,
+where words like "seize," "advance," "inject," "strengthen" are business-positive.
+On militarized/policy language (port seizures, strikes, tariff retaliation) that
+reads exactly backwards -- confirmed in this repo's first live run, where
+Middle East Oil and Trade Wars both showed strongly *positive* FinBERT tone on
+headlines about an active port seizure and tariff escalation. VADER, a cruder
+general-purpose lexicon, got the sign right on those same headlines. Macro
+Interventions is the one bucket where FinBERT's training domain is actually close
+to the subject matter (central-bank / Treasury language resembles analyst-report
+language), so it stays on FinBERT by default.
 """
 
 # Articles pulled per individual query, per run. 3 buckets x ~10 queries x this
@@ -23,6 +40,7 @@ MAX_ARTICLES_PER_QUERY = 8
 BUCKETS = {
     "middle_east_oil": {
         "label": "Middle East Oil Risk",
+        "sentiment_model": "vader",
         "risk_queries": [
             "Israel Iran strike",
             "Houthi Red Sea attack",
@@ -40,6 +58,7 @@ BUCKETS = {
     },
     "macro_interventions": {
         "label": "Macroeconomic Interventions",
+        "sentiment_model": "finbert",
         "risk_queries": [
             "Bank of Japan yen intervention",
             "Federal Reserve emergency action",
@@ -56,6 +75,7 @@ BUCKETS = {
     },
     "trade_wars": {
         "label": "Trade Wars & Escalations",
+        "sentiment_model": "vader",
         "risk_queries": [
             "US Canada tariff dispute",
             "China tariff retaliation",
