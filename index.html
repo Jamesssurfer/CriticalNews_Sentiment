@@ -55,7 +55,9 @@
   .breakdown { display: flex; flex-direction: column; gap: 0.25rem; margin-bottom: 0.75rem; font-size: 0.88rem; }
   .breakdown .label { color: var(--muted); margin-right: 0.5rem; }
   .breakdown .value { font-family: "IBM Plex Mono", ui-monospace, monospace; }
-  .sparkline { width: 100%; max-height: 70px; margin: 0.5rem 0 0.75rem; }
+  .chart-label { display: block; margin-top: 0.5rem; }
+  .trend-chart { width: 100%; max-height: 140px; margin: 0.4rem 0 1rem; }
+  .headlines { margin-top: 1rem; }
   .headlines .label { color: var(--muted); font-size: 0.8rem; display: block; margin-bottom: 0.3rem; }
   .headlines ul { margin: 0; padding-left: 1.1rem; font-size: 0.9rem; }
   .headlines li { margin-bottom: 0.25rem; }
@@ -75,19 +77,19 @@
 <body>
 <header>
   <h1>Macro &amp; geopolitical risk sentiment</h1>
-  <p>Last scan: 2026-09-13T23:06:22+00:00 UTC · Positive score = escalating pressure · Negative = de-escalating</p>
+  <p>Last scan: 2026-09-13T23:22:51+00:00 UTC · Positive score = escalating pressure · Negative = de-escalating</p>
 </header>
 <main>
   
     <section class="panel" style="--accent: #C1524B">
       <div class="panel-head">
         <h2>Middle East Oil Risk</h2>
-        <span class="timestamp">as of 2026-09-13T23:06:22+00:00</span>
+        <span class="timestamp">as of 2026-09-13T23:22:51+00:00</span>
       </div>
 
       <div class="score-row">
         <div class="score">+22.00</div>
-        <span class="delta">▲ +37.44 vs prior run</span>
+        <span class="delta">— +0.00 vs prior run</span>
       </div>
 
       <div class="breakdown">
@@ -101,35 +103,64 @@
         </div>
       </div>
 
-      <canvas class="sparkline" id="chart-95788" height="70"></canvas>
+      <span class="label chart-label">Composite score, last 4 runs (~4 days)</span>
+      <canvas class="trend-chart" id="chart-782" height="120"></canvas>
       <script>
-        new Chart(document.getElementById("chart-95788"), {
+        new Chart(document.getElementById("chart-782"), {
           type: "line",
           data: {
-            labels: ["2026-09-13T18:14:49+00:00", "2026-09-13T22:22:06+00:00", "2026-09-13T23:06:22+00:00"],
-            datasets: [{
-              data: [-15.202, -15.434, 22.001],
-              borderColor: "#C1524B",
-              borderWidth: 1.5,
-              pointRadius: 0,
-              tension: 0.15,
-              fill: false,
-            }]
+            labels: ["09-13 18h", "09-13 22h", "09-13 23h", "09-13 23h"],
+            datasets: [
+              {
+                data: [-15.202, -15.434, 22.001, 22.001],
+                borderColor: "#C1524B",
+                borderWidth: 1.5,
+                pointRadius: 2,
+                pointBackgroundColor: "#C1524B",
+                tension: 0.15,
+                fill: false,
+              },
+              {
+                data: [0, 0, 0, 0],
+                borderColor: "#8a8f9c",
+                borderWidth: 1,
+                borderDash: [4, 4],
+                pointRadius: 0,
+                fill: false,
+              },
+            ]
           },
           options: {
             responsive: true,
-            plugins: { legend: { display: false }, tooltip: { enabled: false } },
-            scales: { x: { display: false }, y: { display: false } },
-            elements: { point: { radius: 0 } },
+            plugins: { legend: { display: false }, tooltip: { enabled: true, mode: "index", intersect: false } },
+            scales: {
+              x: {
+                display: true,
+                ticks: { color: "#8a8f9c", maxTicksLimit: 6, font: { family: "IBM Plex Mono", size: 10 } },
+                grid: { color: "#2a2e3a" },
+              },
+              y: {
+                display: true,
+                ticks: { color: "#8a8f9c", font: { family: "IBM Plex Mono", size: 10 } },
+                grid: { color: "#2a2e3a" },
+              },
+            },
           }
         });
       </script>
 
       <div class="headlines">
-        <span class="label">Top headlines this run</span>
+        <span class="label">Top risk headlines this run</span>
         <ul><li><a href="https://news.google.com/rss/articles/CBMiWkFVX3lxTFByamU5TjBFcHB1R2ZhQ0UtQ2pKTHY1Y09IQ045YlRBNEtMUjV3MVJISGdMZ0dLZ0lzTkR3QTRNdGo2ZDBSVFdObXhySXBvNVYyeDBHLXptQXBxUQ?oc=5" target="_blank" rel="noopener">Iran says US strike killed four at wedding in 'war crime' as US denies targeting civilians - BBC</a></li>
 <li><a href="https://news.google.com/rss/articles/CBMi8gFBVV95cUxNeWFlc1Zsem1ubmFHWTVtVXpYR0tiam9TYVphN1FzekNHdGUtVTNlRTd5OFBhQkFPNm5oMUpSUVItVjNHY3A1N3Bib1c1Qy04SzJKbUZ2UFZhU3dROGxIWnlzQ1BuNXgxWmpUSnFuRFBQbnBncHZldV9Uckw5Sl9NTzlIbVBpZExHTGYwMk1sb0tLYW1NRDNmaVZ1MjBvb244U3BnazNqWHdKTWktLTB1QWh1dGVvQVR0MmdnTEVlbmlkTUh0aW5wRHc4bWJZc1FWeGJLUXI0TDJsR21oS29NcXluWmw0N3JZd3FULW82ZWQ1QQ?oc=5" target="_blank" rel="noopener">USA/Israel/Iran: Investigation into US-Israeli strikes on Tehran neighbourhoods reveals devastating civilian harm - Amnesty International</a></li>
-<li><a href="https://news.google.com/rss/articles/CBMinAFBVV95cUxObk5EbElublhva1o0aEYxbmpnTFB1aEU1dTNvenR2eHJndXFvYjVTTFJmYk5EQWpSVXdlaXhiM2lFeks5aFh6M1hQd2hJSDgwRXB1b3ducmllX19mam9CRFRjN0dlQVp5ak1QaEphcE8wUXpkYW4xUS1JYWpiTDJvcS1EOHduTjN5OWJWNy11anpKMlVoYlgtM2dwNGnSAaIBQVVfeXFMT0FyOVVHZVpXUUtqTWpKZ0hYdnVEZ1FhWTRWNk44bnZlS2Y2dkV5VTVGZjVYbm94MXcwMzN4TUY5YXBPX05qUUM2Q09sM3BYYl9uWlVFcmZsbmFCMjhCZE11bEN3bmt5VFpVdmdybHFfSExucWpXSVpZNVZjQTVOOFZIdXI3VWVvdjdsV1o2b1doQk9ZT0NxUldDTEdaRmZ3Mjh3?oc=5" target="_blank" rel="noopener">Israel-Hezbollah clashes kill 11 as Mideast conflict escalation gathers pace after U.S.-Iran strikes - CNBC</a></li></ul>
+<li><a href="https://news.google.com/rss/articles/CBMinAFBVV95cUxObk5EbElublhva1o0aEYxbmpnTFB1aEU1dTNvenR2eHJndXFvYjVTTFJmYk5EQWpSVXdlaXhiM2lFeks5aFh6M1hQd2hJSDgwRXB1b3ducmllX19mam9CRFRjN0dlQVp5ak1QaEphcE8wUXpkYW4xUS1JYWpiTDJvcS1EOHduTjN5OWJWNy11anpKMlVoYlgtM2dwNGnSAaIBQVVfeXFMT0FyOVVHZVpXUUtqTWpKZ0hYdnVEZ1FhWTRWNk44bnZlS2Y2dkV5VTVGZjVYbm94MXcwMzN4TUY5YXBPX05qUUM2Q09sM3BYYl9uWlVFcmZsbmFCMjhCZE11bEN3bmt5VFpVdmdybHFfSExucWpXSVpZNVZjQTVOOFZIdXI3VWVvdjdsV1o2b1doQk9ZT0NxUldDTEdaRmZ3Mjh3?oc=5" target="_blank" rel="noopener">Israel-Hezbollah clashes kill 11 as Mideast conflict escalation gathers pace after U.S.-Iran strikes - cnbc.com</a></li></ul>
+      </div>
+
+      <div class="headlines">
+        <span class="label">Top de-escalation headlines this run</span>
+        <ul><li><a href="https://news.google.com/rss/articles/CBMiS0FVX3lxTE9vZW1iYUs4MXZfME9Ob2xPbElGdjVDQkxhcjZGSnBPRTVFbUxRN29wdkxNa3cxd1pNSlVkZ0ZiNnFoLTdOUk10LTYyOA?oc=5" target="_blank" rel="noopener">Polish FM Sees Little Hope for Ukraine Peace Talks as Putin Holds Out - Kyiv Post</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMiwAFBVV95cUxQLUdHRmdEQlhlNW9NNlhldXBWNEoxR3dZdlVuR1UwenE4S2otV1JtT1RTRUt6Mk5qX0JnaXZ3NTdjN2UxdFB1bTVjVi1IcTlBbEwyVHdTMzFzb2dNb2RXNEMzRnlXNlc1R1NFQ192LUZVOGIyTGV0OTY5TnFkMFdEVUQya080SWtZVFdSLXI3MUZzbi13ekhwQlpMTFZUVVFWZUFFTmRIYy1jSTlJY3NHaklZQjFPS2hqSkZNUHZQSjk?oc=5" target="_blank" rel="noopener">Trump threatens to bomb Oman if it 'gets in the way' of Hormuz shipping deal - France 24</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxORjlXYnh6SC1CYy0yV2NYM1lHLTJEaHoyNmNhQ0tFWnpnWDBPLVE5Q1A2a0hDNEJHT1V5QWFlZGIxbGlfSWVRQmNmQUFXM2pJelRVQjhxNVlwRkN0QnV1Y2Rtb3VzdlJOWDFvSTlQMGdHS0hLM3FmMUhfbExodjd5eHVXZWp2VEZiUmZyTmpEUmpMRjRuRTJKdTlLOHJKNmdZQzhVbWVYS2VEQUnSAbABQVVfeXFMUGxTOHpwQkh6Nll0Tlo5eHlndU9XNnBrU1pRZzNMUGtuSFRkQlZqd1JuRzhPRVN2RmxGaWxXSVpIZ3hBMGM5ZzFUdzFKVUhZZ0VQS1c3Z1hKakxqS0ZPakpBa19YdHN4ZUVFWmtpZ3dPSTFXZkZwMkZXOERqLTZvWXJvUmdwckZ3aWxRd0V5Uy1tTlh1eE1YWGNwOVJfeHg2V0dnMEJjWXIxcmY3TnVXblM?oc=5" target="_blank" rel="noopener">Trump says Iran war ‘will end immediately’ after US midterm elections - Al Jazeera</a></li></ul>
       </div>
     </section>
     
@@ -137,18 +168,18 @@
     <section class="panel" style="--accent: #4C8CA8">
       <div class="panel-head">
         <h2>Macroeconomic Interventions</h2>
-        <span class="timestamp">as of 2026-09-13T23:06:22+00:00</span>
+        <span class="timestamp">as of 2026-09-13T23:22:51+00:00</span>
       </div>
 
       <div class="score-row">
-        <div class="score">-11.90</div>
-        <span class="delta">▲ +0.47 vs prior run</span>
+        <div class="score">-11.71</div>
+        <span class="delta">▲ +0.19 vs prior run</span>
       </div>
 
       <div class="breakdown">
         <div>
           <span class="label">Risk coverage</span>
-          <span class="value">40 articles, tone +0.37 (finbert)</span>
+          <span class="value">40 articles, tone +0.36 (finbert)</span>
         </div>
         <div>
           <span class="label">De-escalation coverage</span>
@@ -156,35 +187,64 @@
         </div>
       </div>
 
-      <canvas class="sparkline" id="chart-54334" height="70"></canvas>
+      <span class="label chart-label">Composite score, last 4 runs (~4 days)</span>
+      <canvas class="trend-chart" id="chart-20191" height="120"></canvas>
       <script>
-        new Chart(document.getElementById("chart-54334"), {
+        new Chart(document.getElementById("chart-20191"), {
           type: "line",
           data: {
-            labels: ["2026-09-13T18:14:49+00:00", "2026-09-13T22:22:06+00:00", "2026-09-13T23:06:22+00:00"],
-            datasets: [{
-              data: [-11.462, -12.371, -11.899],
-              borderColor: "#4C8CA8",
-              borderWidth: 1.5,
-              pointRadius: 0,
-              tension: 0.15,
-              fill: false,
-            }]
+            labels: ["09-13 18h", "09-13 22h", "09-13 23h", "09-13 23h"],
+            datasets: [
+              {
+                data: [-11.462, -12.371, -11.899, -11.711],
+                borderColor: "#4C8CA8",
+                borderWidth: 1.5,
+                pointRadius: 2,
+                pointBackgroundColor: "#4C8CA8",
+                tension: 0.15,
+                fill: false,
+              },
+              {
+                data: [0, 0, 0, 0],
+                borderColor: "#8a8f9c",
+                borderWidth: 1,
+                borderDash: [4, 4],
+                pointRadius: 0,
+                fill: false,
+              },
+            ]
           },
           options: {
             responsive: true,
-            plugins: { legend: { display: false }, tooltip: { enabled: false } },
-            scales: { x: { display: false }, y: { display: false } },
-            elements: { point: { radius: 0 } },
+            plugins: { legend: { display: false }, tooltip: { enabled: true, mode: "index", intersect: false } },
+            scales: {
+              x: {
+                display: true,
+                ticks: { color: "#8a8f9c", maxTicksLimit: 6, font: { family: "IBM Plex Mono", size: 10 } },
+                grid: { color: "#2a2e3a" },
+              },
+              y: {
+                display: true,
+                ticks: { color: "#8a8f9c", font: { family: "IBM Plex Mono", size: 10 } },
+                grid: { color: "#2a2e3a" },
+              },
+            },
           }
         });
       </script>
 
       <div class="headlines">
-        <span class="label">Top headlines this run</span>
+        <span class="label">Top risk headlines this run</span>
         <ul><li><a href="https://news.google.com/rss/articles/CBMic0FVX3lxTE0tRXluQWxjTDNDS2x2MF9QV01mLTRTTmFSTlg5dHJzWkR3SVhqQjFMT2J2SnB3R25aTnBic0RiejF0Y1Jucm9VOTRCTnJUMFgzTFBHbmw3Q2szaHoyeHlqelpIZjE0UEIwNnZKdzFlTE5pbjQ?oc=5" target="_blank" rel="noopener">Bitcoin posts surprise rally as currency nears $70,000 for the first time since June - Fortune</a></li>
 <li><a href="https://news.google.com/rss/articles/CBMiggFBVV95cUxPaHBSMi1CbElSc0h2SHVfUzQ5MG5LVDhQMjZkb2I2TGtyanpFZGd3R2NxNEptRF91VUx6RVZ1azdzbFdLZFFFVk5vZllKUG94aXJDTi00TmdoOVJacDVkMmc5d1dCMzJQNFJLUjBqQUVOdFdjMkNQZ2doRkNIa0g2SjV3?oc=5" target="_blank" rel="noopener">PBOC injects 50b yuan through treasury bond operations in May - China Daily Global Edition</a></li>
 <li><a href="https://news.google.com/rss/articles/CBMiekFVX3lxTE15VVpBTkVBeTZma01udk9OaEI2OXNJT1ZWQU9NMEp2Ui10UVR2RHNpM3dEOFVZOHo4REN5bXlwU1hKZlhNV0s4QlBycy1PQlgwdjRnSkhDYm9EUDV1QTlpSU1rNDkxaS1EdnUwQjBYeGtBZDFKTG9PUkNB?oc=5" target="_blank" rel="noopener">UAE injects $8bn into banking system as liquidity falls - TheBanker.com</a></li></ul>
+      </div>
+
+      <div class="headlines">
+        <span class="label">Top de-escalation headlines this run</span>
+        <ul><li><a href="https://news.google.com/rss/articles/CBMirAFBVV95cUxPOV9SSUVsVXpWaGF0dlFKVmlYTlVkWUhEZ2xuSXdjVjhyNWZBcFdoY0duYmdMMVg2TFFfVEFJTlFTY2dXU1UtSXp1cE9yWkF0Tm1Fa0JZRjlfU211clhDbjBESGpBNmRRMFptNmNSQXhsd3BsSU1GWUZsaVJyZVVvWFVpSjNQSTB0LS1rcy1OallrdzM0QmdEZjhJTVFGblNNZXNzX3dKaU1fcnNh?oc=5" target="_blank" rel="noopener">USD/JPY outlook: BOJ holds steady as intervention risk builds - stonex.com</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMi0wFBVV95cUxPbDlfMnNhM0xLMkNKVW5NdUY4Rl9TUEJJb1djRXBhb1FERjFReGJEaTFYRTNWamxBUG5LRVpmZE9KSkI1dEJ1VlJLLWtDSGdvRl9FbzRaeHBmQnlwbWxGbmFQa254THo4Mlk0amM2Q2liYzVsSWpDVnNEdE1vMExhZmotLVZDcV9qeS16ZVpsbmFSUlcweDMyZDh4VmZheXRHUGVGRGFFby1qcG0yT0pfSUFyMUQ1OTZpZHdKNWc1S2dkblB2MThFWFhIcFNKVmFQUzJV?oc=5" target="_blank" rel="noopener">Could Fed Adjust Rates Ahead of Midterm Elections? Here’s a Historical Guide - CME Group</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMie0FVX3lxTE9GZTdvcXVuWGZqaElXMlNKcTUxT0N1c0hSeDQ5d2Z3dERpZHlwVnpRVzZXb2FaRHhEWTdsWDVhSXAxaUJvRklSckUyTzdyZ0YzRE1CNDVuY3dSQkJ5M3habTlJdTdqTDN5WlJkSG1yc1ZLTDV1X0ZDaHVaWQ?oc=5" target="_blank" rel="noopener">Shirai Sees BOJ Policy Still Dovish Even After Ueda Delivers What Many See as Hawkish Hold - Kathleen Hays Presents: Central Bank Central</a></li></ul>
       </div>
     </section>
     
@@ -192,18 +252,18 @@
     <section class="panel" style="--accent: #C89B3C">
       <div class="panel-head">
         <h2>Trade Wars & Escalations</h2>
-        <span class="timestamp">as of 2026-09-13T23:06:22+00:00</span>
+        <span class="timestamp">as of 2026-09-13T23:22:51+00:00</span>
       </div>
 
       <div class="score-row">
-        <div class="score">+8.60</div>
-        <span class="delta">▲ +28.06 vs prior run</span>
+        <div class="score">+8.56</div>
+        <span class="delta">▼ -0.03 vs prior run</span>
       </div>
 
       <div class="breakdown">
         <div>
           <span class="label">Risk coverage</span>
-          <span class="value">40 articles, tone -0.29 (vader)</span>
+          <span class="value">40 articles, tone -0.28 (vader)</span>
         </div>
         <div>
           <span class="label">De-escalation coverage</span>
@@ -211,35 +271,64 @@
         </div>
       </div>
 
-      <canvas class="sparkline" id="chart-97779" height="70"></canvas>
+      <span class="label chart-label">Composite score, last 4 runs (~4 days)</span>
+      <canvas class="trend-chart" id="chart-47343" height="120"></canvas>
       <script>
-        new Chart(document.getElementById("chart-97779"), {
+        new Chart(document.getElementById("chart-47343"), {
           type: "line",
           data: {
-            labels: ["2026-09-13T18:14:49+00:00", "2026-09-13T22:22:06+00:00", "2026-09-13T23:06:22+00:00"],
-            datasets: [{
-              data: [-19.38, -19.464, 8.595],
-              borderColor: "#C89B3C",
-              borderWidth: 1.5,
-              pointRadius: 0,
-              tension: 0.15,
-              fill: false,
-            }]
+            labels: ["09-13 18h", "09-13 22h", "09-13 23h", "09-13 23h"],
+            datasets: [
+              {
+                data: [-19.38, -19.464, 8.595, 8.562],
+                borderColor: "#C89B3C",
+                borderWidth: 1.5,
+                pointRadius: 2,
+                pointBackgroundColor: "#C89B3C",
+                tension: 0.15,
+                fill: false,
+              },
+              {
+                data: [0, 0, 0, 0],
+                borderColor: "#8a8f9c",
+                borderWidth: 1,
+                borderDash: [4, 4],
+                pointRadius: 0,
+                fill: false,
+              },
+            ]
           },
           options: {
             responsive: true,
-            plugins: { legend: { display: false }, tooltip: { enabled: false } },
-            scales: { x: { display: false }, y: { display: false } },
-            elements: { point: { radius: 0 } },
+            plugins: { legend: { display: false }, tooltip: { enabled: true, mode: "index", intersect: false } },
+            scales: {
+              x: {
+                display: true,
+                ticks: { color: "#8a8f9c", maxTicksLimit: 6, font: { family: "IBM Plex Mono", size: 10 } },
+                grid: { color: "#2a2e3a" },
+              },
+              y: {
+                display: true,
+                ticks: { color: "#8a8f9c", font: { family: "IBM Plex Mono", size: 10 } },
+                grid: { color: "#2a2e3a" },
+              },
+            },
           }
         });
       </script>
 
       <div class="headlines">
-        <span class="label">Top headlines this run</span>
+        <span class="label">Top risk headlines this run</span>
         <ul><li><a href="https://news.google.com/rss/articles/CBMinAFBVV95cUxNUUZhdUVTWEp1Z09BakFPcjZlRDdaRU1nUGlHbFAzbHd3SFZ0TlYza3RySjdCdWtlRHBLczUyblZpaHJBc3JCQ2JxQXRMaEt1Wkd3ZmFEQlJjc0g0cXJrZHJrMWxOckpKLTVzNUZsR2o5Qkp4ZjJybkx4cU96ZG1OZHNQNlp2TVltVlZXNjFORWlBUEdHd3Rjc1dsSi0?oc=5" target="_blank" rel="noopener">'Unhinged' for Canada to call dispute with U.S. a trade war, says Trump's tariff chief - CBC</a></li>
 <li><a href="https://news.google.com/rss/articles/CBMigAFBVV95cUxNNVgzOWpqTDlwTUtkNDdwZGh0ZFpXQW4yVVVrUUhwajhCbXU0bm1EQld3YjhaSEp6anUxT01hdGg0UzlCbFJuaU1HbHRtN2N5cFl6Q3Roei1mWG1oc1hpM2NQN2NwNklnOVdmOEFFUVEtOGtCOXZxRzREcVF3VjBjaQ?oc=5" target="_blank" rel="noopener">Canadian Stocks Are Ignoring Escalating Trade War With U.S.—for Now - Barron's</a></li>
 <li><a href="https://news.google.com/rss/articles/CBMinwFBVV95cUxPT1djSC1RejQ4VTk4ZTNlOWFjcllxX01BcS1IRUZtck85LUxoTjJ5TERjUEZEbnQ1NHE1QS0zcTVwNnlLX2pJYWo5Qzc5TU1GWmZ6LWRWT0tVSm9yOGkxWG85Z2dENHNMQzRFMHpBNklTWGYxUzl6b3NVc19vaXE4ZE80N1Naak5oS2FNb2FRWEE4dGpGRko3QjhOcm1RNW_SAaQBQVVfeXFMTVA3QklGV0xxMjh3emFlOWxReWxxd0NYWUY3Qi1yNXNXSVRKVWVIdXYyWWxOa09OUjJlSGtZVGtfaWVLZVM4V0ZOeHFTdWVqU2dTaWV2U0NKZUhCM0MtS3UzVG14LTRxa3JmWmt2Yi1USTFvWlZBWDZfNUE2ak5XUXRIR1U4Zk9HeUZWX2VZSUNmWW13ZzEwWDdZcnQ2NzZ6bFhNMkI?oc=5" target="_blank" rel="noopener">US-Canada trade war threatens economic fallout in key midterm states - ABC News - Breaking News, Latest News and Videos</a></li></ul>
+      </div>
+
+      <div class="headlines">
+        <span class="label">Top de-escalation headlines this run</span>
+        <ul><li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTFBxMXZiaDRSYmJGVHdNanpCeUNfaHdPdGlTQ0ZJRENHb2FkV0I1cHAxMzgwLW5vcllLellvNEowQWxSTXA0QlI4VnhPWTNXY1ZIQTVFZDEyQVUtVDFnLXFQUFlHYndKdHhBQmhFSQ?oc=5" target="_blank" rel="noopener">Failing to Renew the USMCA Would Increase Tariff Uncertainty and Harm Americans - Tax Foundation</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxOcHB5eDNncFdaak9CYlEwR05UeVNKMlhUYTJwMHJtWmxSYTI5R1JzbmtGMk4zUTVOR3NDZWpkQ0gtaEpVZXJaY0NFc2JhQUFXRHFzRk9vU0ZkTEpxanhvSlBtbTVxUlVWMlpqV3d4RDNDdFp2Q19SbWFUQUFlVkVyMks3WFQ0ektTZXJQZnNQaTNWaDl3bVZnTWhEN3lFMVVyRnBHZA?oc=5" target="_blank" rel="noopener">Trump readies new tariff to punish China for flood of cheap exports—without risking his trade truce - Fortune</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMinwFBVV95cUxOaElLTzZISkhGRzh3ZFZYbGcxZ21jTHozWXpwM3U1X0N4cXlYRFBpZFczX2E2ZENwdmQ4ZF9abEJfdHc2QmNvOHdUQVJkS1hIOVZhM2Fza0NjQ053TU0xNmdSOWFMUmxBOVA4dHAxZzdZUXZjTEVUSVU4WW9UZ0N6ai1pZHlwRUFnUk5JZDdLcWtrakNaS29xM2xOY2dIeG8?oc=5" target="_blank" rel="noopener">China says it hopes to agree with the US on tariff reductions at ‘an early date’ - AP News</a></li></ul>
       </div>
     </section>
     
