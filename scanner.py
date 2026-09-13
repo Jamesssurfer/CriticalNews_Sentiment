@@ -17,7 +17,7 @@ LOG_PATH = Path(__file__).parent / "data" / "sentiment_log.xlsx"
 LOG_SHEET = "Log"
 
 HEADERS = [
-    "timestamp_utc", "date", "bucket",
+    "timestamp_utc", "date", "bucket", "sentiment_model_used",
     "risk_articles", "risk_finbert_avg", "risk_vader_avg",
     "deescalation_articles", "deescalation_finbert_avg", "deescalation_vader_avg",
     "composite_score",
@@ -31,27 +31,33 @@ def _avg(values: list[float]) -> float:
     return sum(values) / len(values) if values else 0.0
 
 
-def _composite_score(risk_count, risk_finbert_avg, deescalation_count, deescalation_finbert_avg) -> float:
+def _composite_score(risk_count, risk_score_avg, deescalation_count, deescalation_score_avg) -> float:
     """
     Positive = net escalation pressure. Negative = net de-escalation. Zero = quiet on both sides.
 
+    risk_score_avg / deescalation_score_avg come from whichever model that bucket
+    is configured to use (config.py: BUCKETS[...]["sentiment_model"]) -- FinBERT
+    reads militarized/policy language backwards (trained on analyst-report tone,
+    where "seize," "strike," "inject" are business-positive verbs), so buckets
+    built on that kind of language use VADER instead. See config.py for the detail.
+
     v1 heuristic, not a validated model -- reasonable starting weights to tune once
     you have real data to look at:
-      risk_weight    = risk_count * (0.5 - risk_finbert_avg / 2)
-                        (finbert_avg in [-1, 1]; more articles + more negative tone -> higher)
-      deescal_weight = deescalation_count * (0.5 + deescalation_finbert_avg / 2)
+      risk_weight    = risk_count * (0.5 - risk_score_avg / 2)
+                        (score in [-1, 1]; more articles + more negative tone -> higher)
+      deescal_weight = deescalation_count * (0.5 + deescalation_score_avg / 2)
                         (more articles + more positive tone -> higher, subtracted)
 
     This is the mechanism that lets "conflict cooled off" actually register as a
     negative (de-escalating) score instead of just flatlining at zero from silence.
     """
-    risk_weight = risk_count * (0.5 - risk_finbert_avg / 2)
-    deescalation_weight = deescalation_count * (0.5 + deescalation_finbert_avg / 2)
+    risk_weight = risk_count * (0.5 - risk_score_avg / 2)
+    deescalation_weight = deescalation_count * (0.5 + deescalation_score_avg / 2)
     return round(risk_weight - deescalation_weight, 3)
 
 
-def _top_headlines(articles: list[dict], n: int = 3) -> list[dict]:
-    ranked = sorted(articles, key=lambda a: abs(a["finbert"]), reverse=True)[:n]
+def _top_headlines(articles: list[dict], score_key: str, n: int = 3) -> list[dict]:
+    ranked = sorted(articles, key=lambda a: abs(a[score_key]), reverse=True)[:n]
     padded = ranked + [{"title": "", "link": ""}] * (n - len(ranked))
     return padded
 
@@ -80,7 +86,8 @@ def run_scan():
     ws = wb[LOG_SHEET]
 
     for bucket_key, bucket in BUCKETS.items():
-        print(f"Scanning bucket: {bucket['label']}")
+        model = bucket.get("sentiment_model", "finbert")
+        print(f"Scanning bucket: {bucket['label']} (scoring model: {model})")
 
         risk_articles = fetch_and_score_group(bucket["risk_queries"], MAX_ARTICLES_PER_QUERY, score_text)
         deescalation_articles = fetch_and_score_group(
@@ -92,15 +99,18 @@ def run_scan():
         deescalation_finbert_avg = _avg([a["finbert"] for a in deescalation_articles])
         deescalation_vader_avg = _avg([a["vader"] for a in deescalation_articles])
 
+        risk_active_avg = risk_vader_avg if model == "vader" else risk_finbert_avg
+        deescalation_active_avg = deescalation_vader_avg if model == "vader" else deescalation_finbert_avg
+
         composite = _composite_score(
-            len(risk_articles), risk_finbert_avg,
-            len(deescalation_articles), deescalation_finbert_avg,
+            len(risk_articles), risk_active_avg,
+            len(deescalation_articles), deescalation_active_avg,
         )
 
-        top3 = _top_headlines(risk_articles, 3)
+        top3 = _top_headlines(risk_articles, model, 3)
 
         row = [
-            timestamp, date_str, bucket["label"],
+            timestamp, date_str, bucket["label"], model,
             len(risk_articles), round(risk_finbert_avg, 3), round(risk_vader_avg, 3),
             len(deescalation_articles), round(deescalation_finbert_avg, 3), round(deescalation_vader_avg, 3),
             composite,
@@ -110,7 +120,7 @@ def run_scan():
 
         ws.append(row)
         print(
-            f"  risk={len(risk_articles)} articles (avg finbert {risk_finbert_avg:.2f}), "
+            f"  risk={len(risk_articles)} articles (active tone {risk_active_avg:.2f}), "
             f"deescalation={len(deescalation_articles)} articles, composite={composite}"
         )
 
