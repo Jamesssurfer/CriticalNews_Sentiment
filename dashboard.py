@@ -51,6 +51,11 @@ def _bucket_panel_html(bucket: str, log_df: pd.DataFrame) -> str:
         arrow = "▲" if delta > 0 else ("▼" if delta < 0 else "—")
         delta_html = f'<span class="delta">{arrow} {delta:+.2f} vs prior run</span>'
 
+    model = latest.get("sentiment_model_used", "finbert")
+    model = model if isinstance(model, str) and model in ("vader", "finbert") else "finbert"
+    risk_tone = latest["risk_vader_avg"] if model == "vader" else latest["risk_finbert_avg"]
+    deesc_tone = latest["deescalation_vader_avg"] if model == "vader" else latest["deescalation_finbert_avg"]
+
     headlines = []
     for i in (1, 2, 3):
         title = latest.get(f"top_headline_{i}", "")
@@ -79,11 +84,11 @@ def _bucket_panel_html(bucket: str, log_df: pd.DataFrame) -> str:
       <div class="breakdown">
         <div>
           <span class="label">Risk coverage</span>
-          <span class="value">{int(latest['risk_articles'])} articles, tone {_fmt_score(latest['risk_finbert_avg'])}</span>
+          <span class="value">{int(latest['risk_articles'])} articles, tone {_fmt_score(risk_tone)} ({model})</span>
         </div>
         <div>
           <span class="label">De-escalation coverage</span>
-          <span class="value">{int(latest['deescalation_articles'])} articles, tone {_fmt_score(latest['deescalation_finbert_avg'])}</span>
+          <span class="value">{int(latest['deescalation_articles'])} articles, tone {_fmt_score(deesc_tone)} ({model})</span>
         </div>
       </div>
 
