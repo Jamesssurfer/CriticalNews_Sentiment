@@ -108,9 +108,9 @@
       </div>
 
       <span class="label chart-label">Composite score, last 8 runs (~4 days)</span>
-      <canvas class="trend-chart" id="chart-96355" height="120"></canvas>
+      <canvas class="trend-chart" id="chart-63477" height="120"></canvas>
       <script>
-        new Chart(document.getElementById("chart-96355"), {
+        new Chart(document.getElementById("chart-63477"), {
           type: "line",
           data: {
             labels: ["09-13 18h", "09-13 22h", "09-13 23h", "09-13 23h", "09-13 23h", "09-14 04h", "09-14 15h", "09-14 20h"],
@@ -192,9 +192,9 @@
       </div>
 
       <span class="label chart-label">Composite score, last 8 runs (~4 days)</span>
-      <canvas class="trend-chart" id="chart-43723" height="120"></canvas>
+      <canvas class="trend-chart" id="chart-66579" height="120"></canvas>
       <script>
-        new Chart(document.getElementById("chart-43723"), {
+        new Chart(document.getElementById("chart-66579"), {
           type: "line",
           data: {
             labels: ["09-13 18h", "09-13 22h", "09-13 23h", "09-13 23h", "09-13 23h", "09-14 04h", "09-14 15h", "09-14 20h"],
@@ -276,9 +276,9 @@
       </div>
 
       <span class="label chart-label">Composite score, last 8 runs (~4 days)</span>
-      <canvas class="trend-chart" id="chart-25583" height="120"></canvas>
+      <canvas class="trend-chart" id="chart-56927" height="120"></canvas>
       <script>
-        new Chart(document.getElementById("chart-25583"), {
+        new Chart(document.getElementById("chart-56927"), {
           type: "line",
           data: {
             labels: ["09-13 18h", "09-13 22h", "09-13 23h", "09-13 23h", "09-13 23h", "09-14 04h", "09-14 15h", "09-14 20h"],
@@ -338,7 +338,14 @@
     
   <section class="panel" style="--accent: var(--rule)">
     <div class="panel-head"><h2>Daily history</h2></div>
-    <p class="muted">No daily rollup yet.</p>
+    
+    <table class="daily-table">
+      <thead><tr><th>Date</th><th>Middle East Oil Risk</th><th>Macroeconomic Interventions</th><th>Trade Wars & Escalations</th></tr></thead>
+      <tbody><tr><td>2026-09-13</td><td>+7.07 <span class="muted">(n/a)</span></td><td>-11.87 <span class="muted">(n/a)</span></td><td>-2.61 <span class="muted">(n/a)</span></td></tr><tr><td>2026-09-14</td><td>+21.06 <span class="muted">(n/a)</span></td><td>-12.12 <span class="muted">(n/a)</span></td><td>+7.53 <span class="muted">(n/a)</span></td></tr></tbody>
+    </table>
+    <p class="muted small">Value shown is the day's average composite score; the figure in
+    parentheses is the change versus the prior day for that bucket.</p>
+    
   </section>
 </main>
 <footer>
