@@ -493,12 +493,14 @@ def _bucket_panel_html(bucket: str, log_df: pd.DataFrame, daily_df: pd.DataFrame
             }});
           </script>
 
-          {signal_html}
-
-          <span class="label chart-label">{px_title}</span>
-          <div class="px-wrap"><canvas class="px-canvas" id="{px_canvas_id}"></canvas></div>
-          <script>{px_script}</script>
         </div>
+      </div>
+
+      <div class="px-full">
+        {signal_html}
+        <span class="label chart-label">{px_title}</span>
+        <div class="px-wrap"><canvas class="px-canvas" id="{px_canvas_id}"></canvas></div>
+        <script>{px_script}</script>
       </div>
     </section>
     """
@@ -707,7 +709,8 @@ def build_dashboard():
   .tab.active {{ color: var(--text); border-bottom-color: var(--accent); }}
   .slide {{ display: none; }}
   .slide.active {{ display: block; }}
-  .px-wrap {{ position: relative; height: 420px; margin: 0.4rem 0 1.25rem; }}
+  .px-full {{ margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--rule); }}
+  .px-wrap {{ position: relative; height: 540px; margin: 0.4rem 0 0.25rem; }}
   .signal {{ border: 1px solid var(--rule); border-left-width: 3px; padding: 0.6rem 0.8rem; margin: 0.5rem 0 0.6rem; font-size: 0.82rem; }}
   .signal-head {{ display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.35rem; }}
   .signal .badge {{ font-weight: 600; font-size: 0.9rem; }}
