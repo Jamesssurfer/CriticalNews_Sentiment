@@ -22,6 +22,12 @@ DAILY_HEADERS = [
 
 def build_daily_frame() -> pd.DataFrame:
     df = pd.read_excel(LOG_PATH, sheet_name=LOG_SHEET)
+    # Drop failed scans so they don't drag the daily average toward 0. A scan
+    # counts as failed when EVERY bucket returned zero articles in that run
+    # (e.g. 2026-09-28T16:44 -- Google News fetch returned nothing). Daily
+    # average is then total score / number of successful scans.
+    articles_per_run = (df["risk_articles"] + df["deescalation_articles"]).groupby(df["timestamp_utc"]).transform("sum")
+    df = df[articles_per_run > 0]
     grouped = (
         df.groupby(["date", "bucket"], as_index=False)
         .agg(
