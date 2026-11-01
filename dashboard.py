@@ -270,17 +270,17 @@ PX_CHART_JS = """
           ticks: { color: "__DXY_COLOR__", font: { family: "IBM Plex Mono", size: 10 }, callback: function (v) { return v + "%"; } },
           grid: { drawOnChartArea: false },
         },
-        __EXTRA_SCALE__
+        __CTX_SCALE__
       },
     }
   });
 })();
 """
 
-EXTRA_YIELD_SCALE = """yYield: {
+CTX_SCALE = """yCtx: {
           position: "right",
-          title: { display: true, text: "10Y yield change (bp)", color: "__THIRD_COLOR__", font: { size: 11 } },
-          ticks: { color: "__THIRD_COLOR__", font: { family: "IBM Plex Mono", size: 10 } },
+          title: { display: true, text: "__CTX_AXIS_TITLE__", color: "__THIRD_COLOR__", font: { size: 11 } },
+          ticks: { color: "__THIRD_COLOR__", font: { family: "IBM Plex Mono", size: 10 }, callback: function (v) { return v + "__CTX_SUFFIX__"; } },
           grid: { drawOnChartArea: false },
         },"""
 
@@ -347,8 +347,7 @@ def _bucket_panel_html(bucket: str, log_df: pd.DataFrame, daily_df: pd.DataFrame
     missing = [n for n, d in ((PRIMARY_LABEL, dxy_px), (cfg["context_label"], ctx_px)) if not d]
     px_note = f' <span class="muted">(unavailable this build: {", ".join(missing)})</span>' if missing else ""
     px_title = f"Daily composite vs {PRIMARY_LABEL} and {cfg['context_label']}, last {len(px_dates)} days{px_note}"
-    third_axis = "yYield" if unit == "bp" else "yPrice"
-    px_script = PX_CHART_JS.replace("__EXTRA_SCALE__", EXTRA_YIELD_SCALE if unit == "bp" else "")
+    px_script = PX_CHART_JS.replace("__CTX_SCALE__", CTX_SCALE)
     for token, value in {
         "__CANVAS__": f"chart-px-{abs(hash(bucket)) % 100000}",
         "__LABELS__": json.dumps(px_dates),
@@ -358,8 +357,10 @@ def _bucket_panel_html(bucket: str, log_df: pd.DataFrame, daily_df: pd.DataFrame
         "__ROLL__": json.dumps(_roll_flags(ctx_px, px_dates, cfg["context_ticker"])),
         "__COLOR__": color, "__DXY_COLOR__": PRIMARY_COLOR, "__DXY_LABEL__": PRIMARY_LABEL,
         "__THIRD_COLOR__": cfg["context_color"], "__THIRD_LABEL__": cfg["context_label"],
-        "__THIRD_AXIS__": third_axis, "__THIRD_UNIT__": "bp" if unit == "bp" else "%",
-        "__PRICE_AXIS_TITLE__": f"{PRIMARY_LABEL} / price change since start (%)" if unit != "bp" else f"{PRIMARY_LABEL} change since start (%)",
+        "__THIRD_AXIS__": "yCtx", "__THIRD_UNIT__": "bp" if unit == "bp" else "%",
+        "__PRICE_AXIS_TITLE__": f"{PRIMARY_LABEL} change since start (%)",
+        "__CTX_AXIS_TITLE__": f"{cfg['context_label'].split(' (')[0]} change since start ({'bp' if unit == 'bp' else '%'})",
+        "__CTX_SUFFIX__": "" if unit == "bp" else "%",
     }.items():
         px_script = px_script.replace(token, value)
     px_canvas_id = f"chart-px-{abs(hash(bucket)) % 100000}"
