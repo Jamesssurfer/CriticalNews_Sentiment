@@ -9,7 +9,13 @@ import json
 from collections import OrderedDict
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
+
+from config import (
+    CORR_MIN_DAYS, PRICE_SIGNALS, PRIMARY_COLOR, PRIMARY_LABEL, PRIMARY_TICKER,
+    ROLL_JUMP_PCT, SIGNAL_MIN_DAYS, SIGNAL_SIGMA, SIGNAL_WINDOW_DAYS,
+)
 
 LOG_PATH = Path(__file__).parent / "data" / "sentiment_log.xlsx"
 OUTPUT_PATH = Path(__file__).parent / "index.html"
@@ -22,27 +28,28 @@ BUCKET_COLORS = {
 
 POINTS_PER_RUN_CHART = 24  # rolling 4 days at 6 runs/day
 DAILY_CHART_DAYS = 30  # daily-score chart per bucket -- shows fewer if less history exists yet
-DXY_TICKER = "DX-Y.NYB"
-DXY_COLOR = "#E7E5DE"
 
 
-def _fetch_dxy_daily(first_date: str, last_date: str) -> dict:
-    """Daily DXY closes from yfinance as {"YYYY-MM-DD": close}. Returns {} on any
+def _fetch_daily_closes(ticker: str, first_date: str, last_date: str) -> dict:
+    """Daily closes from yfinance as {"YYYY-MM-DD": close}. Returns {} on any
     failure (yfinance missing, Yahoo unreachable, empty frame) so the dashboard
-    still builds -- the price line is simply omitted and the chart says so."""
+    still builds -- that line is simply omitted and the status says so."""
     try:
         import yfinance as yf
 
-        start = (pd.Timestamp(first_date) - pd.Timedelta(days=7)).strftime("%Y-%m-%d")
+        start = (pd.Timestamp(first_date) - pd.Timedelta(days=10)).strftime("%Y-%m-%d")
         end = (pd.Timestamp(last_date) + pd.Timedelta(days=2)).strftime("%Y-%m-%d")
-        hist = yf.Ticker(DXY_TICKER).history(start=start, end=end, interval="1d", auto_adjust=False)
+        hist = yf.Ticker(ticker).history(start=start, end=end, interval="1d", auto_adjust=False)
         if hist is None or hist.empty:
-            print(f"yfinance returned no rows for {DXY_TICKER}; price line omitted.")
+            print(f"yfinance returned no rows for {ticker}; line omitted.")
             return {}
-        closes = hist["Close"].dropna()
-        return {d.strftime("%Y-%m-%d"): round(float(v), 3) for d, v in closes.items()}
+        out = {d.strftime("%Y-%m-%d"): float(v) for d, v in hist["Close"].dropna().items()}
+        # ^TNX has been quoted both as yield x10 (42.5) and as yield (4.25).
+        if ticker == "^TNX" and out and float(np.median(list(out.values()))) > 20:
+            out = {k: v / 10 for k, v in out.items()}
+        return out
     except Exception as exc:  # network, import, parsing -- never block the build
-        print(f"DXY fetch failed ({exc!r}); price line omitted.")
+        print(f"Price fetch failed for {ticker} ({exc!r}); line omitted.")
         return {}
 
 
@@ -59,7 +66,226 @@ def _fmt_pct(x) -> str:
         return "n/a"
 
 
-def _bucket_panel_html(bucket: str, log_df: pd.DataFrame, daily_df: pd.DataFrame, dxy: dict, active: bool = False) -> str:
+def _five_day_status(bucket_daily: pd.DataFrame, px: dict, expected_sign: int) -> dict:
+    """Compare the composite's 5-trading-day change with the price's, on dates
+    where both exist. Confirming/Diverging only when BOTH moved more than
+    SIGNAL_SIGMA std devs of their own history of 5-day changes; otherwise No signal."""
+    n = SIGNAL_WINDOW_DAYS
+    if not px or bucket_daily.empty:
+        return {"state": "no_data"}
+    f = bucket_daily[["date", "composite_avg"]].copy()
+    f["date"] = f["date"].astype(str)
+    f["px"] = f["date"].map(px)
+    f = f.dropna().sort_values("date").reset_index(drop=True)
+    if len(f) < SIGNAL_MIN_DAYS:
+        return {"state": "insufficient", "have": len(f)}
+
+    dc = f["composite_avg"].diff(n)
+    dp = f["px"].pct_change(n) * 100
+    obs = pd.DataFrame({"dc": dc, "dp": dp}).dropna()
+    sc, sp = float(obs["dc"].std()), float(obs["dp"].std())
+    last_dc, last_dp = float(dc.iloc[-1]), float(dp.iloc[-1])
+    c_big = abs(last_dc) > SIGNAL_SIGMA * sc
+    p_big = abs(last_dp) > SIGNAL_SIGMA * sp
+    aligned = expected_sign * np.sign(last_dc) * np.sign(last_dp) > 0
+    state = "no_signal"
+    if c_big and p_big:
+        state = "confirming" if aligned else "diverging"
+
+    corr = None
+    if len(f) >= CORR_MIN_DAYS:
+        rows = list(range(len(f) - 1, -1, -n))[::-1]  # non-overlapping 5-day windows ending at the latest day
+        sub = f.iloc[rows]
+        cc = sub["composite_avg"].diff().dropna()
+        pp = sub["px"].pct_change().dropna()
+        if len(cc) >= 4:
+            corr = float(cc.reset_index(drop=True).corr(pp.reset_index(drop=True)))
+
+    return {
+        "state": state, "date": f["date"].iloc[-1], "days": len(f),
+        "dc": last_dc, "dp": last_dp, "sc": sc, "sp": sp, "corr": corr,
+    }
+
+
+def _series_change(px: dict, unit: str):
+    """Latest 5-trading-day change of a price series: % for prices, bp for yields."""
+    s = pd.Series(px).sort_index()
+    n = SIGNAL_WINDOW_DAYS
+    if len(s) <= n:
+        return None
+    if unit == "bp":
+        return float((s.iloc[-1] - s.iloc[-1 - n]) * 100)
+    return float((s.iloc[-1] / s.iloc[-1 - n] - 1) * 100)
+
+
+def _regime_label(dxy: dict, tnx: dict) -> str:
+    """Hawkish vs dovish read from DXY and the 10Y yield moving together over 5 days."""
+    n = SIGNAL_WINDOW_DAYS
+    f = pd.DataFrame({"dxy": pd.Series(dxy), "y": pd.Series(tnx)}).dropna().sort_index()
+    if len(f) <= n:
+        return "n/a (not enough price history)"
+    d_dxy = f["dxy"].iloc[-1] - f["dxy"].iloc[-1 - n]
+    d_y = f["y"].iloc[-1] - f["y"].iloc[-1 - n]
+    if d_dxy > 0 and d_y > 0:
+        return "Hawkish regime (DXY up, 10Y yield up)"
+    if d_dxy < 0 and d_y < 0:
+        return "Dovish / liquidity regime (DXY down, 10Y yield down)"
+    return "Mixed (DXY and 10Y yield moving opposite ways)"
+
+
+def _signal_html(status: dict, cfg: dict, ctx_change, regime) -> str:
+    sign = cfg["expected_sign"]
+    sign_txt = f"{sign:+d} (DXY {'rises with' if sign > 0 else 'falls as'} the score)"
+    state = status.get("state")
+    heads = {
+        "confirming": ("Confirming", "confirming"),
+        "diverging": ("Diverging", "diverging"),
+        "no_signal": ("No signal", "quiet"),
+        "insufficient": ("Not enough data", "quiet"),
+        "no_data": ("No price data", "quiet"),
+    }
+    badge, cls = heads[state]
+    lines = []
+    if state in ("confirming", "diverging", "no_signal"):
+        corr = status["corr"]
+        corr_txt = (
+            f"{corr:+.2f} (realized sign {'+' if corr > 0 else '-'})" if corr is not None
+            else f"insufficient data ({status['days']} of {CORR_MIN_DAYS} days)"
+        )
+        explain = {
+            "confirming": "Score and DXY both moved beyond their normal 5-day range, in the expected direction.",
+            "diverging": "Score and DXY both moved beyond their normal 5-day range, against the expected direction. "
+                         "A mismatch, not a forecast -- news can trail price.",
+            "no_signal": "At least one series is inside its normal 5-day range.",
+        }[state]
+        lines.append(explain)
+        lines.append(
+            f"Composite 5-day change {status['dc']:+.2f} (normal range \u00b1{SIGNAL_SIGMA * status['sc']:.2f}) &middot; "
+            f"{PRIMARY_LABEL} 5-day change {status['dp']:+.2f}% (normal range \u00b1{SIGNAL_SIGMA * status['sp']:.2f}%)"
+        )
+        lines.append(f"Expected sign {sign_txt} &middot; Realized correlation {corr_txt}")
+        asof = f"as of {status['date']}"
+    elif state == "insufficient":
+        lines.append(f"Needs {SIGNAL_MIN_DAYS} aligned trading days of score and price; have {status['have']}.")
+        asof = ""
+    else:
+        lines.append(f"{PRIMARY_TICKER} prices were unavailable this build, so no comparison was made.")
+        asof = ""
+
+    if ctx_change is not None:
+        unit = "bp" if cfg["context_unit"] == "bp" else "%"
+        lines.append(f"{cfg['context_label']} 5-day change: {ctx_change:+.1f}{unit}")
+    if regime:
+        lines.append(f"Regime: {regime}")
+
+    body = "".join(f"<div>{ln}</div>" for ln in lines)
+    return (
+        f'<div class="signal signal-{cls}"><div class="signal-head">'
+        f'<span class="badge">{badge}</span><span class="muted small">{asof} &middot; 5-day windows, '
+        f'normal range = {SIGNAL_SIGMA:g} std dev of own history</span></div>'
+        f'<div class="signal-body mono">{body}</div></div>'
+    )
+
+
+def _chart_series(px: dict, dates: list, unit: str):
+    """(change-since-window-start, raw close) per chart date. None where no close."""
+    vals = [px.get(d) for d in dates]
+    base = next((v for v in vals if v is not None), None)
+    if base is None:
+        return [None] * len(dates), [None] * len(dates)
+    if unit == "bp":
+        ch = [round((v - base) * 100, 1) if v is not None else None for v in vals]
+    else:
+        ch = [round((v / base - 1) * 100, 3) if v is not None else None for v in vals]
+    raw = [round(v, 3) if v is not None else None for v in vals]
+    return ch, raw
+
+
+def _roll_flags(px: dict, dates: list, ticker: str) -> list:
+    thresh = ROLL_JUMP_PCT.get(ticker)
+    if not thresh or not px:
+        return [False] * len(dates)
+    s = pd.Series(px).sort_index()
+    jumps = (s.pct_change().abs() * 100) > thresh
+    flagged = set(jumps[jumps].index)
+    return [d in flagged for d in dates]
+
+
+PX_CHART_JS = """
+(function () {
+  var rollFlags = __ROLL__;
+  var raws = [null, __DXY_RAW__, __THIRD_RAW__];
+  var units = ["", "%", "__THIRD_UNIT__"];
+  new Chart(document.getElementById("__CANVAS__"), {
+    type: "line",
+    data: {
+      labels: __LABELS__,
+      datasets: [
+        { label: "Composite", data: __COMPOSITE__, yAxisID: "yScore", borderColor: "__COLOR__",
+          backgroundColor: "__COLOR__", borderWidth: 1.5, pointRadius: 2, tension: 0.15, fill: false },
+        { label: "__DXY_LABEL__", data: __DXY__, yAxisID: "yPrice", borderColor: "__DXY_COLOR__",
+          backgroundColor: "__DXY_COLOR__", borderWidth: 1.5, pointRadius: 2, tension: 0.15, spanGaps: true, fill: false },
+        { label: "__THIRD_LABEL__", data: __THIRD__, yAxisID: "__THIRD_AXIS__", borderColor: "__THIRD_COLOR__",
+          backgroundColor: "__THIRD_COLOR__", borderWidth: 1.5, borderDash: [5, 3], pointRadius: 2, tension: 0.15,
+          spanGaps: true, fill: false },
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        legend: { display: true, labels: { color: "#8a8f9c", boxWidth: 12, font: { family: "IBM Plex Mono", size: 11 } } },
+        tooltip: {
+          callbacks: {
+            label: function (ctx) {
+              var v = ctx.parsed.y;
+              if (v === null || v === undefined) return ctx.dataset.label + ": n/a";
+              var raw = raws[ctx.datasetIndex];
+              var tail = raw && raw[ctx.dataIndex] !== null ? "  (close " + raw[ctx.dataIndex] + ")" : "";
+              return ctx.dataset.label + ": " + v.toFixed(2) + units[ctx.datasetIndex] + tail;
+            },
+            footer: function (items) {
+              for (var i = 0; i < items.length; i++) {
+                if (items[i].datasetIndex === 2 && rollFlags[items[i].dataIndex]) {
+                  return "Large 1-day jump on this futures series (possible contract roll)";
+                }
+              }
+              return "";
+            }
+          }
+        },
+      },
+      scales: {
+        x: { ticks: { color: "#8a8f9c", maxTicksLimit: 8, font: { family: "IBM Plex Mono", size: 10 } }, grid: { color: "#2a2e3a" } },
+        yScore: {
+          position: "left",
+          title: { display: true, text: "Daily composite", color: "__COLOR__", font: { size: 11 } },
+          ticks: { color: "__COLOR__", font: { family: "IBM Plex Mono", size: 10 } },
+          grid: { color: "#2a2e3a" },
+        },
+        yPrice: {
+          position: "right",
+          title: { display: true, text: "__PRICE_AXIS_TITLE__", color: "__DXY_COLOR__", font: { size: 11 } },
+          ticks: { color: "__DXY_COLOR__", font: { family: "IBM Plex Mono", size: 10 }, callback: function (v) { return v + "%"; } },
+          grid: { drawOnChartArea: false },
+        },
+        __EXTRA_SCALE__
+      },
+    }
+  });
+})();
+"""
+
+EXTRA_YIELD_SCALE = """yYield: {
+          position: "right",
+          title: { display: true, text: "10Y yield change (bp)", color: "__THIRD_COLOR__", font: { size: 11 } },
+          ticks: { color: "__THIRD_COLOR__", font: { family: "IBM Plex Mono", size: 10 } },
+          grid: { drawOnChartArea: false },
+        },"""
+
+
+def _bucket_panel_html(bucket: str, log_df: pd.DataFrame, daily_df: pd.DataFrame, prices: dict, active: bool = False) -> str:
     rows = log_df[log_df["bucket"] == bucket].sort_values("timestamp_utc")
     if rows.empty:
         return ""
@@ -106,15 +332,37 @@ def _bucket_panel_html(bucket: str, log_df: pd.DataFrame, daily_df: pd.DataFrame
     daily_zero_line = json.dumps([0] * len(daily_rows)) if not daily_rows.empty else "[]"
     daily_canvas_id = f"chart-daily-{abs(hash(bucket)) % 100000}"
 
-    # Daily composite vs DXY close. X axis = the same dates as the daily chart;
-    # DXY has no weekend/holiday closes, so those are null and the line spans the gap.
+    # Daily composite vs DXY (+ per-bucket context series). Chart dates = the daily chart's dates.
+    cfg = PRICE_SIGNALS[bucket]
+    dxy_px = prices.get(PRIMARY_TICKER, {})
+    ctx_px = prices.get(cfg["context_ticker"], {})
+    unit = cfg["context_unit"]
     px_dates = daily_rows["date"].astype(str).tolist() if not daily_rows.empty else []
-    px_series = [dxy.get(d) for d in px_dates]
-    px_labels = json.dumps(px_dates)
-    px_composite = json.dumps([round(float(v), 3) for v in daily_rows["composite_avg"].tolist()]) if px_dates else "[]"
-    px_prices = json.dumps(px_series)
+    dxy_ch, dxy_raw = _chart_series(dxy_px, px_dates, "%")
+    ctx_ch, ctx_raw = _chart_series(ctx_px, px_dates, unit)
+    bucket_daily = daily_df[daily_df["bucket"] == bucket] if not daily_df.empty else daily_df
+    status = _five_day_status(bucket_daily, dxy_px, cfg["expected_sign"])
+    regime = _regime_label(dxy_px, ctx_px) if cfg.get("regime") and dxy_px and ctx_px else None
+    signal_html = _signal_html(status, cfg, _series_change(ctx_px, unit) if ctx_px else None, regime)
+    missing = [n for n, d in ((PRIMARY_LABEL, dxy_px), (cfg["context_label"], ctx_px)) if not d]
+    px_note = f' <span class="muted">(unavailable this build: {", ".join(missing)})</span>' if missing else ""
+    px_title = f"Daily composite vs {PRIMARY_LABEL} and {cfg['context_label']}, last {len(px_dates)} days{px_note}"
+    third_axis = "yYield" if unit == "bp" else "yPrice"
+    px_script = PX_CHART_JS.replace("__EXTRA_SCALE__", EXTRA_YIELD_SCALE if unit == "bp" else "")
+    for token, value in {
+        "__CANVAS__": f"chart-px-{abs(hash(bucket)) % 100000}",
+        "__LABELS__": json.dumps(px_dates),
+        "__COMPOSITE__": json.dumps([round(float(v), 3) for v in daily_rows["composite_avg"].tolist()]) if px_dates else "[]",
+        "__DXY__": json.dumps(dxy_ch), "__DXY_RAW__": json.dumps(dxy_raw),
+        "__THIRD__": json.dumps(ctx_ch), "__THIRD_RAW__": json.dumps(ctx_raw),
+        "__ROLL__": json.dumps(_roll_flags(ctx_px, px_dates, cfg["context_ticker"])),
+        "__COLOR__": color, "__DXY_COLOR__": PRIMARY_COLOR, "__DXY_LABEL__": PRIMARY_LABEL,
+        "__THIRD_COLOR__": cfg["context_color"], "__THIRD_LABEL__": cfg["context_label"],
+        "__THIRD_AXIS__": third_axis, "__THIRD_UNIT__": "bp" if unit == "bp" else "%",
+        "__PRICE_AXIS_TITLE__": f"{PRIMARY_LABEL} / price change since start (%)" if unit != "bp" else f"{PRIMARY_LABEL} change since start (%)",
+    }.items():
+        px_script = px_script.replace(token, value)
     px_canvas_id = f"chart-px-{abs(hash(bucket)) % 100000}"
-    px_note = "" if any(v is not None for v in px_series) else f' <span class="muted">(DXY prices unavailable this build)</span>'
 
     return f"""
     <section class="panel slide{' active' if active else ''}" data-bucket="{bucket}" style="--accent: {color}">
@@ -245,67 +493,11 @@ def _bucket_panel_html(bucket: str, log_df: pd.DataFrame, daily_df: pd.DataFrame
             }});
           </script>
 
-          <span class="label chart-label">Daily composite score vs US Dollar Index ({DXY_TICKER} close), last {len(daily_rows)} days{px_note}</span>
-          <canvas class="trend-chart px-chart" id="{px_canvas_id}" height="230"></canvas>
-          <script>
-            new Chart(document.getElementById("{px_canvas_id}"), {{
-              type: "line",
-              data: {{
-                labels: {px_labels},
-                datasets: [
-                  {{
-                    label: "Composite",
-                    data: {px_composite},
-                    yAxisID: "yScore",
-                    borderColor: "{color}",
-                    borderWidth: 1.5,
-                    pointRadius: 2,
-                    pointBackgroundColor: "{color}",
-                    tension: 0.15,
-                    fill: false,
-                  }},
-                  {{
-                    label: "{DXY_TICKER}",
-                    data: {px_prices},
-                    yAxisID: "yPrice",
-                    borderColor: "{DXY_COLOR}",
-                    borderWidth: 1.5,
-                    pointRadius: 2,
-                    pointBackgroundColor: "{DXY_COLOR}",
-                    tension: 0.15,
-                    spanGaps: true,
-                    fill: false,
-                  }},
-                ]
-              }},
-              options: {{
-                responsive: true,
-                interaction: {{ mode: "index", intersect: false }},
-                plugins: {{
-                  legend: {{ display: true, labels: {{ color: "#8a8f9c", boxWidth: 12, font: {{ family: "IBM Plex Mono", size: 10 }} }} }},
-                  tooltip: {{ enabled: true }},
-                }},
-                scales: {{
-                  x: {{
-                    ticks: {{ color: "#8a8f9c", maxTicksLimit: 6, font: {{ family: "IBM Plex Mono", size: 10 }} }},
-                    grid: {{ color: "#2a2e3a" }},
-                  }},
-                  yScore: {{
-                    position: "left",
-                    title: {{ display: true, text: "Composite", color: "{color}", font: {{ size: 10 }} }},
-                    ticks: {{ color: "{color}", font: {{ family: "IBM Plex Mono", size: 10 }} }},
-                    grid: {{ color: "#2a2e3a" }},
-                  }},
-                  yPrice: {{
-                    position: "right",
-                    title: {{ display: true, text: "{DXY_TICKER}", color: "{DXY_COLOR}", font: {{ size: 10 }} }},
-                    ticks: {{ color: "{DXY_COLOR}", font: {{ family: "IBM Plex Mono", size: 10 }} }},
-                    grid: {{ drawOnChartArea: false }},
-                  }},
-                }},
-              }}
-            }});
-          </script>
+          {signal_html}
+
+          <span class="label chart-label">{px_title}</span>
+          <div class="px-wrap"><canvas class="px-canvas" id="{px_canvas_id}"></canvas></div>
+          <script>{px_script}</script>
         </div>
       </div>
     </section>
@@ -391,15 +583,15 @@ def build_dashboard():
         daily_df = pd.DataFrame()
 
     last_updated = log_df["timestamp_utc"].max() if not log_df.empty else "n/a"
-    if not daily_df.empty:
-        recent_dates = daily_df["date"].astype(str).sort_values()
-        dxy = _fetch_dxy_daily(recent_dates.iloc[0], recent_dates.iloc[-1]) if len(recent_dates) else {}
-    else:
-        dxy = {}
+    prices = {}
+    if not daily_df.empty and len(daily_df):
+        all_dates = daily_df["date"].astype(str).sort_values()
+        tickers = {PRIMARY_TICKER} | {c["context_ticker"] for c in PRICE_SIGNALS.values()}
+        prices = {t: _fetch_daily_closes(t, all_dates.iloc[0], all_dates.iloc[-1]) for t in sorted(tickers)}
 
     panel_list = []  # (bucket, html) -- skip buckets with no rows so tabs and slides always match
     for b in BUCKET_COLORS:
-        html_b = _bucket_panel_html(b, log_df, daily_df, dxy, active=not panel_list)
+        html_b = _bucket_panel_html(b, log_df, daily_df, prices, active=not panel_list)
         if html_b:
             panel_list.append((b, html_b))
     panels_html = "\n".join(h for _, h in panel_list)
@@ -515,7 +707,17 @@ def build_dashboard():
   .tab.active {{ color: var(--text); border-bottom-color: var(--accent); }}
   .slide {{ display: none; }}
   .slide.active {{ display: block; }}
-  .px-chart {{ max-height: 260px; }}
+  .px-wrap {{ position: relative; height: 420px; margin: 0.4rem 0 1.25rem; }}
+  .signal {{ border: 1px solid var(--rule); border-left-width: 3px; padding: 0.6rem 0.8rem; margin: 0.5rem 0 0.6rem; font-size: 0.82rem; }}
+  .signal-head {{ display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.35rem; }}
+  .signal .badge {{ font-weight: 600; font-size: 0.9rem; }}
+  .signal-body div {{ margin-bottom: 0.15rem; }}
+  .signal-confirming {{ border-left-color: #5FA777; }}
+  .signal-confirming .badge {{ color: #5FA777; }}
+  .signal-diverging {{ border-left-color: #D9822B; }}
+  .signal-diverging .badge {{ color: #D9822B; }}
+  .signal-quiet {{ border-left-color: var(--muted); }}
+  .signal-quiet .badge {{ color: var(--muted); }}
   footer {{ max-width: 1280px; margin: 0 auto; padding: 1rem 1.5rem 2.5rem; color: var(--muted); font-size: 0.78rem; }}
 </style>
 </head>
