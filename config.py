@@ -91,3 +91,52 @@ BUCKETS = {
         ],
     },
 }
+
+
+# ---------------------------------------------------------------------------
+# Price-vs-sentiment status (read only by dashboard.py; scanner.py ignores it)
+# ---------------------------------------------------------------------------
+# Every bucket's daily composite is compared against DXY. The "context" series
+# is drawn as a third line; it never feeds the Confirming/Diverging status
+# (Macro's 10Y yield only feeds the regime label).
+#
+# expected_sign: +1 = DXY expected to move WITH the composite, -1 = AGAINST it.
+# Keys must match the bucket "label" strings above exactly.
+PRIMARY_TICKER = "DX-Y.NYB"
+PRIMARY_LABEL = "DXY"
+PRIMARY_COLOR = "#E7E5DE"
+
+SIGNAL_WINDOW_DAYS = 5     # compare 5-trading-day changes
+SIGNAL_SIGMA = 1.0         # "beyond normal" = more than this many std devs of the series' own 5-day changes
+SIGNAL_MIN_DAYS = 20       # aligned trading days needed before any status can fire
+CORR_MIN_DAYS = 60         # aligned trading days needed before a realized correlation is shown
+
+# Flag a 1-day jump bigger than this % on a continuous futures ticker in the
+# tooltip -- Yahoo's GC=F / BZ=F are not back-adjusted, so a contract roll can
+# look like a real move.
+ROLL_JUMP_PCT = {"BZ=F": 4.0, "GC=F": 2.5}
+
+PRICE_SIGNALS = {
+    "Middle East Oil Risk": {
+        "expected_sign": +1,
+        "context_ticker": "BZ=F",
+        "context_label": "Brent (context)",
+        "context_unit": "%",
+        "context_color": "#7FB069",
+    },
+    "Macroeconomic Interventions": {
+        "expected_sign": -1,
+        "context_ticker": "^TNX",
+        "context_label": "10Y yield change (regime)",
+        "context_unit": "bp",
+        "context_color": "#B48EAD",
+        "regime": True,
+    },
+    "Trade Wars & Escalations": {
+        "expected_sign": +1,
+        "context_ticker": "GC=F",
+        "context_label": "Gold (context)",
+        "context_unit": "%",
+        "context_color": "#7FC8C0",
+    },
+}
