@@ -22,6 +22,28 @@ BUCKET_COLORS = {
 
 POINTS_PER_RUN_CHART = 24  # rolling 4 days at 6 runs/day
 DAILY_CHART_DAYS = 30  # daily-score chart per bucket -- shows fewer if less history exists yet
+DXY_TICKER = "DX-Y.NYB"
+DXY_COLOR = "#E7E5DE"
+
+
+def _fetch_dxy_daily(first_date: str, last_date: str) -> dict:
+    """Daily DXY closes from yfinance as {"YYYY-MM-DD": close}. Returns {} on any
+    failure (yfinance missing, Yahoo unreachable, empty frame) so the dashboard
+    still builds -- the price line is simply omitted and the chart says so."""
+    try:
+        import yfinance as yf
+
+        start = (pd.Timestamp(first_date) - pd.Timedelta(days=7)).strftime("%Y-%m-%d")
+        end = (pd.Timestamp(last_date) + pd.Timedelta(days=2)).strftime("%Y-%m-%d")
+        hist = yf.Ticker(DXY_TICKER).history(start=start, end=end, interval="1d", auto_adjust=False)
+        if hist is None or hist.empty:
+            print(f"yfinance returned no rows for {DXY_TICKER}; price line omitted.")
+            return {}
+        closes = hist["Close"].dropna()
+        return {d.strftime("%Y-%m-%d"): round(float(v), 3) for d, v in closes.items()}
+    except Exception as exc:  # network, import, parsing -- never block the build
+        print(f"DXY fetch failed ({exc!r}); price line omitted.")
+        return {}
 
 
 def _fmt_score(x) -> str:
@@ -37,7 +59,7 @@ def _fmt_pct(x) -> str:
         return "n/a"
 
 
-def _bucket_panel_html(bucket: str, log_df: pd.DataFrame, daily_df: pd.DataFrame) -> str:
+def _bucket_panel_html(bucket: str, log_df: pd.DataFrame, daily_df: pd.DataFrame, dxy: dict, active: bool = False) -> str:
     rows = log_df[log_df["bucket"] == bucket].sort_values("timestamp_utc")
     if rows.empty:
         return ""
@@ -84,8 +106,18 @@ def _bucket_panel_html(bucket: str, log_df: pd.DataFrame, daily_df: pd.DataFrame
     daily_zero_line = json.dumps([0] * len(daily_rows)) if not daily_rows.empty else "[]"
     daily_canvas_id = f"chart-daily-{abs(hash(bucket)) % 100000}"
 
+    # Daily composite vs DXY close. X axis = the same dates as the daily chart;
+    # DXY has no weekend/holiday closes, so those are null and the line spans the gap.
+    px_dates = daily_rows["date"].astype(str).tolist() if not daily_rows.empty else []
+    px_series = [dxy.get(d) for d in px_dates]
+    px_labels = json.dumps(px_dates)
+    px_composite = json.dumps([round(float(v), 3) for v in daily_rows["composite_avg"].tolist()]) if px_dates else "[]"
+    px_prices = json.dumps(px_series)
+    px_canvas_id = f"chart-px-{abs(hash(bucket)) % 100000}"
+    px_note = "" if any(v is not None for v in px_series) else f' <span class="muted">(DXY prices unavailable this build)</span>'
+
     return f"""
-    <section class="panel" style="--accent: {color}">
+    <section class="panel slide{' active' if active else ''}" data-bucket="{bucket}" style="--accent: {color}">
       <div class="panel-head">
         <h2>{bucket}</h2>
         <span class="timestamp">as of {latest['timestamp_utc']}</span>
@@ -212,6 +244,68 @@ def _bucket_panel_html(bucket: str, log_df: pd.DataFrame, daily_df: pd.DataFrame
               }}
             }});
           </script>
+
+          <span class="label chart-label">Daily composite score vs US Dollar Index ({DXY_TICKER} close), last {len(daily_rows)} days{px_note}</span>
+          <canvas class="trend-chart px-chart" id="{px_canvas_id}" height="230"></canvas>
+          <script>
+            new Chart(document.getElementById("{px_canvas_id}"), {{
+              type: "line",
+              data: {{
+                labels: {px_labels},
+                datasets: [
+                  {{
+                    label: "Composite",
+                    data: {px_composite},
+                    yAxisID: "yScore",
+                    borderColor: "{color}",
+                    borderWidth: 1.5,
+                    pointRadius: 2,
+                    pointBackgroundColor: "{color}",
+                    tension: 0.15,
+                    fill: false,
+                  }},
+                  {{
+                    label: "{DXY_TICKER}",
+                    data: {px_prices},
+                    yAxisID: "yPrice",
+                    borderColor: "{DXY_COLOR}",
+                    borderWidth: 1.5,
+                    pointRadius: 2,
+                    pointBackgroundColor: "{DXY_COLOR}",
+                    tension: 0.15,
+                    spanGaps: true,
+                    fill: false,
+                  }},
+                ]
+              }},
+              options: {{
+                responsive: true,
+                interaction: {{ mode: "index", intersect: false }},
+                plugins: {{
+                  legend: {{ display: true, labels: {{ color: "#8a8f9c", boxWidth: 12, font: {{ family: "IBM Plex Mono", size: 10 }} }} }},
+                  tooltip: {{ enabled: true }},
+                }},
+                scales: {{
+                  x: {{
+                    ticks: {{ color: "#8a8f9c", maxTicksLimit: 6, font: {{ family: "IBM Plex Mono", size: 10 }} }},
+                    grid: {{ color: "#2a2e3a" }},
+                  }},
+                  yScore: {{
+                    position: "left",
+                    title: {{ display: true, text: "Composite", color: "{color}", font: {{ size: 10 }} }},
+                    ticks: {{ color: "{color}", font: {{ family: "IBM Plex Mono", size: 10 }} }},
+                    grid: {{ color: "#2a2e3a" }},
+                  }},
+                  yPrice: {{
+                    position: "right",
+                    title: {{ display: true, text: "{DXY_TICKER}", color: "{DXY_COLOR}", font: {{ size: 10 }} }},
+                    ticks: {{ color: "{DXY_COLOR}", font: {{ family: "IBM Plex Mono", size: 10 }} }},
+                    grid: {{ drawOnChartArea: false }},
+                  }},
+                }},
+              }}
+            }});
+          </script>
         </div>
       </div>
     </section>
@@ -297,7 +391,22 @@ def build_dashboard():
         daily_df = pd.DataFrame()
 
     last_updated = log_df["timestamp_utc"].max() if not log_df.empty else "n/a"
-    panels_html = "\n".join(_bucket_panel_html(b, log_df, daily_df) for b in BUCKET_COLORS)
+    if not daily_df.empty:
+        recent_dates = daily_df["date"].astype(str).sort_values()
+        dxy = _fetch_dxy_daily(recent_dates.iloc[0], recent_dates.iloc[-1]) if len(recent_dates) else {}
+    else:
+        dxy = {}
+
+    panel_list = []  # (bucket, html) -- skip buckets with no rows so tabs and slides always match
+    for b in BUCKET_COLORS:
+        html_b = _bucket_panel_html(b, log_df, daily_df, dxy, active=not panel_list)
+        if html_b:
+            panel_list.append((b, html_b))
+    panels_html = "\n".join(h for _, h in panel_list)
+    tabs_html = "\n".join(
+        f'<button class="tab{" active" if i == 0 else ""}" data-bucket="{b}" style="--accent: {BUCKET_COLORS[b]}">{b}</button>'
+        for i, (b, _) in enumerate(panel_list)
+    )
     daily_html = _grouped_daily_history_html(daily_df, list(BUCKET_COLORS.keys()))
 
     html = f"""<!doctype html>
@@ -396,6 +505,17 @@ def build_dashboard():
   details.week-group summary::-webkit-details-marker {{ display: none; }}
   details.week-group summary::before {{ content: "▸"; font-size: 0.7rem; }}
   details.week-group[open] > summary::before {{ content: "▾"; }}
+  nav.tabs {{ max-width: 1280px; margin: 0 auto; padding: 1rem 1.5rem 0; display: flex; gap: 0.5rem; flex-wrap: wrap; }}
+  .tab {{
+    background: var(--panel); color: var(--muted); border: 1px solid var(--rule);
+    border-bottom: 2px solid transparent; padding: 0.55rem 1rem; cursor: pointer;
+    font-family: "IBM Plex Sans", sans-serif; font-size: 0.9rem; font-weight: 500;
+  }}
+  .tab:hover {{ color: var(--text); }}
+  .tab.active {{ color: var(--text); border-bottom-color: var(--accent); }}
+  .slide {{ display: none; }}
+  .slide.active {{ display: block; }}
+  .px-chart {{ max-height: 260px; }}
   footer {{ max-width: 1280px; margin: 0 auto; padding: 1rem 1.5rem 2.5rem; color: var(--muted); font-size: 0.78rem; }}
 </style>
 </head>
@@ -404,6 +524,9 @@ def build_dashboard():
   <h1>Macro &amp; geopolitical risk sentiment</h1>
   <p>Last scan: {last_updated} UTC · Positive score = escalating pressure · Negative = de-escalating</p>
 </header>
+<nav class="tabs">
+  {tabs_html}
+</nav>
 <main>
   {panels_html}
   <section class="panel" style="--accent: var(--rule)">
@@ -416,6 +539,30 @@ def build_dashboard():
   (article volume x tone, risk side minus de-escalation side) -- treat it as a
   directional read, not a calibrated probability.
 </footer>
+<script>
+  // Slide switcher. Charts built while a slide is display:none can come up at the
+  // wrong size, so each chart in the newly shown slide gets an explicit resize().
+  (function () {{
+    var tabs = document.querySelectorAll(".tab");
+    var slides = document.querySelectorAll(".slide");
+    tabs.forEach(function (tab) {{
+      tab.addEventListener("click", function () {{
+        var bucket = tab.getAttribute("data-bucket");
+        tabs.forEach(function (t) {{ t.classList.toggle("active", t === tab); }});
+        slides.forEach(function (s) {{
+          var on = s.getAttribute("data-bucket") === bucket;
+          s.classList.toggle("active", on);
+          if (on) {{
+            s.querySelectorAll("canvas").forEach(function (c) {{
+              var ch = window.Chart && Chart.getChart ? Chart.getChart(c) : null;
+              if (ch) ch.resize();
+            }});
+          }}
+        }});
+      }});
+    }});
+  }})();
+</script>
 </body>
 </html>
 """
