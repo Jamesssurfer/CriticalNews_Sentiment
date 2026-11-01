@@ -104,14 +104,24 @@
   .tab.active { color: var(--text); border-bottom-color: var(--accent); }
   .slide { display: none; }
   .slide.active { display: block; }
-  .px-chart { max-height: 260px; }
+  .px-wrap { position: relative; height: 420px; margin: 0.4rem 0 1.25rem; }
+  .signal { border: 1px solid var(--rule); border-left-width: 3px; padding: 0.6rem 0.8rem; margin: 0.5rem 0 0.6rem; font-size: 0.82rem; }
+  .signal-head { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.35rem; }
+  .signal .badge { font-weight: 600; font-size: 0.9rem; }
+  .signal-body div { margin-bottom: 0.15rem; }
+  .signal-confirming { border-left-color: #5FA777; }
+  .signal-confirming .badge { color: #5FA777; }
+  .signal-diverging { border-left-color: #D9822B; }
+  .signal-diverging .badge { color: #D9822B; }
+  .signal-quiet { border-left-color: var(--muted); }
+  .signal-quiet .badge { color: var(--muted); }
   footer { max-width: 1280px; margin: 0 auto; padding: 1rem 1.5rem 2.5rem; color: var(--muted); font-size: 0.78rem; }
 </style>
 </head>
 <body>
 <header>
   <h1>Macro &amp; geopolitical risk sentiment</h1>
-  <p>Last scan: 2026-11-01T05:50:30+00:00 UTC · Positive score = escalating pressure · Negative = de-escalating</p>
+  <p>Last scan: 2026-11-01T06:20:45+00:00 UTC · Positive score = escalating pressure · Negative = de-escalating</p>
 </header>
 <nav class="tabs">
   <button class="tab active" data-bucket="Middle East Oil Risk" style="--accent: #C1524B">Middle East Oil Risk</button>
@@ -123,24 +133,24 @@
     <section class="panel slide active" data-bucket="Middle East Oil Risk" style="--accent: #C1524B">
       <div class="panel-head">
         <h2>Middle East Oil Risk</h2>
-        <span class="timestamp">as of 2026-11-01T05:50:30+00:00</span>
+        <span class="timestamp">as of 2026-11-01T06:20:45+00:00</span>
       </div>
 
       <div class="panel-body">
         <div class="panel-left">
           <div class="score-row">
-            <div class="score">+15.77</div>
-            <span class="delta">▼ -1.59 vs prior run</span>
+            <div class="score">+16.62</div>
+            <span class="delta">▲ +0.85 vs prior run</span>
           </div>
 
           <div class="breakdown">
             <div>
               <span class="label">Risk coverage</span>
-              <span class="value">45 articles, tone -0.38 (vader)</span>
+              <span class="value">46 articles, tone -0.38 (vader)</span>
             </div>
             <div>
               <span class="label">De-escalation coverage</span>
-              <span class="value">31 articles, tone -0.02 (vader)</span>
+              <span class="value">31 articles, tone -0.03 (vader)</span>
             </div>
           </div>
 
@@ -153,7 +163,7 @@
 
           <div class="headlines">
             <span class="label">Top de-escalation headlines this run</span>
-            <ul><li><a href="https://news.google.com/rss/articles/CBMiV0FVX3lxTE94N19hcVhoa1F6QW9pZ3R2eEZBWnpJN1RHTjczS28yZFIyQ183VnI5RlBxZFk2a0tTVkszOWNXOG11dVZDZEhhd3JYUjh3dUI0Mk85eEpTNA?oc=5" target="_blank" rel="noopener">Gaza: 340 children killed despite ceasefire agreement - UNICEF - UN News</a></li>
+            <ul><li><a href="https://news.google.com/rss/articles/CBMipAFBVV95cUxOckJJU3Z3Q2xIM212Z0daU0NBREx1aXp2VnZOcDNyRWRFTHhQcWFvLWJtWkk3WGxzTUhTNTNpcDQ5S2xzZFJKeXdSVk5BMWJEUG1SN0xDVjhlQW5MRTdPelh0RnBIQ2l2UHBGVy1lcDZhcWp2RF9lSjNaNFlrYk1DcEZHVndZZjFNUGIzZHNXMnBiT3gxTzhoOG9ENmFKOWtFSnhpNQ?oc=5" target="_blank" rel="noopener">Two Palestinians killed in Israeli ceasefire violations in Gaza - Yeni Şafak English</a></li>
 <li><a href="https://news.google.com/rss/articles/CBMiyAFBVV95cUxOODBHZGo0TEhURWc2Rm9nLUJjaF9Hb09YLUpnU3JlTWJ0OHJKd3p0dFZEYWdpYUNPVlNJdFJoYXhGOVdOX29rdHhjQ2F0c2E2VjJRQndHcEtSY1JIdEFzTkJJd3RKX2lKYWxRMnRQYjZvVnpxNnJQTlBmUFY5TWMzZTJ4akRuS1pKNExQY2lCQTAzRVlWOG4wYnZRVV9tRWJQdDJKQ0owZVdZUS1ZQmZYbTlMR0xxbF9uZ3ZvWkRNNDJtX0JNclZhLQ?oc=5" target="_blank" rel="noopener">Iranian envoys meet Qatari mediators as threat looms of US strikes after midterms - Reuters</a></li>
 <li><a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxPeEdkN0ppYUVFT203ak9hRXNaMDZyb3I1eW1KTTQ2OEZQdTZFT01BVGxCeVJSOVViQzYzak9NRFRpaE5uVmhkNDd3VVNvdzA3N3JrTUtlTTE2Mm5HNUdKQmdaZjUxUldIVUFERjF5VHJTRjdSSWx3bVpvbExrazNWNmFCLVg2cktTaGIzYnBfdi1Wbm1YZXZfQUU0TVB0ZF9fSjhMV012U2o3dw?oc=5" target="_blank" rel="noopener">JD Vance contacts senior Iranian official in bid to revive peace talks - Euronews.com</a></li></ul>
           </div>
@@ -161,15 +171,15 @@
 
         <div class="panel-right">
           <span class="label chart-label">Composite score, last 24 runs (~4 days)</span>
-          <canvas class="trend-chart" id="chart-4h-82209" height="190"></canvas>
+          <canvas class="trend-chart" id="chart-4h-19824" height="190"></canvas>
           <script>
-            new Chart(document.getElementById("chart-4h-82209"), {
+            new Chart(document.getElementById("chart-4h-19824"), {
               type: "line",
               data: {
-                labels: ["10-25 13h", "10-25 18h", "10-25 22h", "10-26 04h", "10-26 15h", "10-26 21h", "10-27 04h", "10-27 14h", "10-27 20h", "10-28 05h", "10-28 15h", "10-28 20h", "10-29 05h", "10-29 15h", "10-29 21h", "10-30 05h", "10-30 15h", "10-30 20h", "10-31 05h", "10-31 14h", "10-31 19h", "10-31 23h", "11-01 05h", "11-01 05h"],
+                labels: ["10-25 18h", "10-25 22h", "10-26 04h", "10-26 15h", "10-26 21h", "10-27 04h", "10-27 14h", "10-27 20h", "10-28 05h", "10-28 15h", "10-28 20h", "10-29 05h", "10-29 15h", "10-29 21h", "10-30 05h", "10-30 15h", "10-30 20h", "10-31 05h", "10-31 14h", "10-31 19h", "10-31 23h", "11-01 05h", "11-01 05h", "11-01 06h"],
                 datasets: [
                   {
-                    data: [21.492, 21.053, 18.449, 19.566, 19.257, 17.332, 15.778, 17.804, 18.148, 16.835, 16.156, 15.793, 17.378, 17.689, 14.407, 15.262, 14.439, 14.22, 14.241, 14.948, 15.686, 15.807, 17.364, 15.772],
+                    data: [21.053, 18.449, 19.566, 19.257, 17.332, 15.778, 17.804, 18.148, 16.835, 16.156, 15.793, 17.378, 17.689, 14.407, 15.262, 14.439, 14.22, 14.241, 14.948, 15.686, 15.807, 17.364, 15.772, 16.618],
                     borderColor: "#C1524B",
                     borderWidth: 1.5,
                     pointRadius: 2,
@@ -207,9 +217,9 @@
           </script>
 
           <span class="label chart-label">Daily composite score, last 30 days</span>
-          <canvas class="trend-chart" id="chart-daily-82209" height="190"></canvas>
+          <canvas class="trend-chart" id="chart-daily-19824" height="190"></canvas>
           <script>
-            new Chart(document.getElementById("chart-daily-82209"), {
+            new Chart(document.getElementById("chart-daily-19824"), {
               type: "line",
               data: {
                 labels: ["2026-10-02", "2026-10-03", "2026-10-04", "2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10", "2026-10-11", "2026-10-12", "2026-10-13", "2026-10-14", "2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31"],
@@ -252,67 +262,75 @@
             });
           </script>
 
-          <span class="label chart-label">Daily composite score vs US Dollar Index (DX-Y.NYB close), last 30 days</span>
-          <canvas class="trend-chart px-chart" id="chart-px-82209" height="230"></canvas>
+          <div class="signal signal-quiet"><div class="signal-head"><span class="badge">No signal</span><span class="muted small">as of 2026-10-30 &middot; 5-day windows, normal range = 1 std dev of own history</span></div><div class="signal-body mono"><div>At least one series is inside its normal 5-day range.</div><div>Composite 5-day change -3.32 (normal range ±3.46) &middot; DXY 5-day change +0.07% (normal range ±0.51%)</div><div>Expected sign +1 (DXY rises with the score) &middot; Realized correlation insufficient data (35 of 60 days)</div><div>Brent (context) 5-day change: -2.8%</div></div></div>
+
+          <span class="label chart-label">Daily composite vs DXY and Brent (context), last 30 days</span>
+          <div class="px-wrap"><canvas class="px-canvas" id="chart-px-19824"></canvas></div>
           <script>
-            new Chart(document.getElementById("chart-px-82209"), {
-              type: "line",
-              data: {
-                labels: ["2026-10-02", "2026-10-03", "2026-10-04", "2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10", "2026-10-11", "2026-10-12", "2026-10-13", "2026-10-14", "2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31"],
-                datasets: [
-                  {
-                    label: "Composite",
-                    data: [18.71, 18.554, 18.978, 20.275, 17.658, 17.221, 16.845, 16.708, 18.268, 19.833, 18.099, 17.736, 17.777, 16.99, 17.77, 17.474, 19.304, 18.242, 20.936, 19.311, 19.432, 17.958, 19.587, 19.952, 18.718, 17.243, 16.261, 16.491, 14.64, 15.17],
-                    yAxisID: "yScore",
-                    borderColor: "#C1524B",
-                    borderWidth: 1.5,
-                    pointRadius: 2,
-                    pointBackgroundColor: "#C1524B",
-                    tension: 0.15,
-                    fill: false,
-                  },
-                  {
-                    label: "DX-Y.NYB",
-                    data: [101.93, null, null, 102.17, 101.83, 102.24, 102.14, 102.21, null, null, 102.58, 102.18, 102.55, 102.0, 101.84, null, null, 101.98, 101.73, 101.78, 101.61, 101.81, null, null, 101.96, 102.32, 102.19, 102.04, 101.88, null],
-                    yAxisID: "yPrice",
-                    borderColor: "#E7E5DE",
-                    borderWidth: 1.5,
-                    pointRadius: 2,
-                    pointBackgroundColor: "#E7E5DE",
-                    tension: 0.15,
-                    spanGaps: true,
-                    fill: false,
-                  },
-                ]
-              },
-              options: {
-                responsive: true,
-                interaction: { mode: "index", intersect: false },
-                plugins: {
-                  legend: { display: true, labels: { color: "#8a8f9c", boxWidth: 12, font: { family: "IBM Plex Mono", size: 10 } } },
-                  tooltip: { enabled: true },
-                },
-                scales: {
-                  x: {
-                    ticks: { color: "#8a8f9c", maxTicksLimit: 6, font: { family: "IBM Plex Mono", size: 10 } },
-                    grid: { color: "#2a2e3a" },
-                  },
-                  yScore: {
-                    position: "left",
-                    title: { display: true, text: "Composite", color: "#C1524B", font: { size: 10 } },
-                    ticks: { color: "#C1524B", font: { family: "IBM Plex Mono", size: 10 } },
-                    grid: { color: "#2a2e3a" },
-                  },
-                  yPrice: {
-                    position: "right",
-                    title: { display: true, text: "DX-Y.NYB", color: "#E7E5DE", font: { size: 10 } },
-                    ticks: { color: "#E7E5DE", font: { family: "IBM Plex Mono", size: 10 } },
-                    grid: { drawOnChartArea: false },
-                  },
-                },
+(function () {
+  var rollFlags = [false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
+  var raws = [null, [101.93, null, null, 102.17, 101.83, 102.24, 102.14, 102.21, null, null, 102.58, 102.18, 102.55, 102.0, 101.84, null, null, 101.98, 101.73, 101.78, 101.61, 101.81, null, null, 101.96, 102.32, 102.19, 102.04, 101.88, null], [102.25, null, null, 100.32, 100.58, 100.2, 104.28, 104.72, null, null, 106.65, 105.69, 106.06, 105.92, 109.86, null, null, 109.55, 108.79, 108.82, 113.17, 116.72, null, null, 115.81, 113.88, 115.32, 114.88, 113.43, null]];
+  var units = ["", "%", "%"];
+  new Chart(document.getElementById("chart-px-19824"), {
+    type: "line",
+    data: {
+      labels: ["2026-10-02", "2026-10-03", "2026-10-04", "2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10", "2026-10-11", "2026-10-12", "2026-10-13", "2026-10-14", "2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31"],
+      datasets: [
+        { label: "Composite", data: [18.71, 18.554, 18.978, 20.275, 17.658, 17.221, 16.845, 16.708, 18.268, 19.833, 18.099, 17.736, 17.777, 16.99, 17.77, 17.474, 19.304, 18.242, 20.936, 19.311, 19.432, 17.958, 19.587, 19.952, 18.718, 17.243, 16.261, 16.491, 14.64, 15.17], yAxisID: "yScore", borderColor: "#C1524B",
+          backgroundColor: "#C1524B", borderWidth: 1.5, pointRadius: 2, tension: 0.15, fill: false },
+        { label: "DXY", data: [0.0, null, null, 0.235, -0.098, 0.304, 0.206, 0.275, null, null, 0.638, 0.245, 0.608, 0.069, -0.088, null, null, 0.049, -0.196, -0.147, -0.314, -0.118, null, null, 0.029, 0.383, 0.255, 0.108, -0.049, null], yAxisID: "yPrice", borderColor: "#E7E5DE",
+          backgroundColor: "#E7E5DE", borderWidth: 1.5, pointRadius: 2, tension: 0.15, spanGaps: true, fill: false },
+        { label: "Brent (context)", data: [0.0, null, null, -1.888, -1.633, -2.005, 1.985, 2.416, null, null, 4.303, 3.364, 3.726, 3.589, 7.443, null, null, 7.139, 6.396, 6.425, 10.68, 14.152, null, null, 13.262, 11.374, 12.782, 12.352, 10.934, null], yAxisID: "yPrice", borderColor: "#7FB069",
+          backgroundColor: "#7FB069", borderWidth: 1.5, borderDash: [5, 3], pointRadius: 2, tension: 0.15,
+          spanGaps: true, fill: false },
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        legend: { display: true, labels: { color: "#8a8f9c", boxWidth: 12, font: { family: "IBM Plex Mono", size: 11 } } },
+        tooltip: {
+          callbacks: {
+            label: function (ctx) {
+              var v = ctx.parsed.y;
+              if (v === null || v === undefined) return ctx.dataset.label + ": n/a";
+              var raw = raws[ctx.datasetIndex];
+              var tail = raw && raw[ctx.dataIndex] !== null ? "  (close " + raw[ctx.dataIndex] + ")" : "";
+              return ctx.dataset.label + ": " + v.toFixed(2) + units[ctx.datasetIndex] + tail;
+            },
+            footer: function (items) {
+              for (var i = 0; i < items.length; i++) {
+                if (items[i].datasetIndex === 2 && rollFlags[items[i].dataIndex]) {
+                  return "Large 1-day jump on this futures series (possible contract roll)";
+                }
               }
-            });
-          </script>
+              return "";
+            }
+          }
+        },
+      },
+      scales: {
+        x: { ticks: { color: "#8a8f9c", maxTicksLimit: 8, font: { family: "IBM Plex Mono", size: 10 } }, grid: { color: "#2a2e3a" } },
+        yScore: {
+          position: "left",
+          title: { display: true, text: "Daily composite", color: "#C1524B", font: { size: 11 } },
+          ticks: { color: "#C1524B", font: { family: "IBM Plex Mono", size: 10 } },
+          grid: { color: "#2a2e3a" },
+        },
+        yPrice: {
+          position: "right",
+          title: { display: true, text: "DXY / price change since start (%)", color: "#E7E5DE", font: { size: 11 } },
+          ticks: { color: "#E7E5DE", font: { family: "IBM Plex Mono", size: 10 }, callback: function (v) { return v + "%"; } },
+          grid: { drawOnChartArea: false },
+        },
+        
+      },
+    }
+  });
+})();
+</script>
         </div>
       </div>
     </section>
@@ -321,20 +339,20 @@
     <section class="panel slide" data-bucket="Macroeconomic Interventions" style="--accent: #4C8CA8">
       <div class="panel-head">
         <h2>Macroeconomic Interventions</h2>
-        <span class="timestamp">as of 2026-11-01T05:50:30+00:00</span>
+        <span class="timestamp">as of 2026-11-01T06:20:45+00:00</span>
       </div>
 
       <div class="panel-body">
         <div class="panel-left">
           <div class="score-row">
-            <div class="score">-10.57</div>
-            <span class="delta">▲ +3.71 vs prior run</span>
+            <div class="score">-14.01</div>
+            <span class="delta">▼ -3.44 vs prior run</span>
           </div>
 
           <div class="breakdown">
             <div>
               <span class="label">Risk coverage</span>
-              <span class="value">40 articles, tone +0.43 (finbert)</span>
+              <span class="value">40 articles, tone +0.60 (finbert)</span>
             </div>
             <div>
               <span class="label">De-escalation coverage</span>
@@ -359,15 +377,15 @@
 
         <div class="panel-right">
           <span class="label chart-label">Composite score, last 24 runs (~4 days)</span>
-          <canvas class="trend-chart" id="chart-4h-8962" height="190"></canvas>
+          <canvas class="trend-chart" id="chart-4h-9415" height="190"></canvas>
           <script>
-            new Chart(document.getElementById("chart-4h-8962"), {
+            new Chart(document.getElementById("chart-4h-9415"), {
               type: "line",
               data: {
-                labels: ["10-25 13h", "10-25 18h", "10-25 22h", "10-26 04h", "10-26 15h", "10-26 21h", "10-27 04h", "10-27 14h", "10-27 20h", "10-28 05h", "10-28 15h", "10-28 20h", "10-29 05h", "10-29 15h", "10-29 21h", "10-30 05h", "10-30 15h", "10-30 20h", "10-31 05h", "10-31 14h", "10-31 19h", "10-31 23h", "11-01 05h", "11-01 05h"],
+                labels: ["10-25 18h", "10-25 22h", "10-26 04h", "10-26 15h", "10-26 21h", "10-27 04h", "10-27 14h", "10-27 20h", "10-28 05h", "10-28 15h", "10-28 20h", "10-29 05h", "10-29 15h", "10-29 21h", "10-30 05h", "10-30 15h", "10-30 20h", "10-31 05h", "10-31 14h", "10-31 19h", "10-31 23h", "11-01 05h", "11-01 05h", "11-01 06h"],
                 datasets: [
                   {
-                    data: [-8.478, -10.015, -9.312, -10.7, -10.351, -10.536, -9.924, -9.3, -10.607, -10.804, -8.189, -7.146, -12.595, -8.954, -9.398, -8.75, -10.401, -7.767, -11.502, -12.412, -12.579, -9.272, -14.275, -10.566],
+                    data: [-10.015, -9.312, -10.7, -10.351, -10.536, -9.924, -9.3, -10.607, -10.804, -8.189, -7.146, -12.595, -8.954, -9.398, -8.75, -10.401, -7.767, -11.502, -12.412, -12.579, -9.272, -14.275, -10.566, -14.009],
                     borderColor: "#4C8CA8",
                     borderWidth: 1.5,
                     pointRadius: 2,
@@ -405,9 +423,9 @@
           </script>
 
           <span class="label chart-label">Daily composite score, last 30 days</span>
-          <canvas class="trend-chart" id="chart-daily-8962" height="190"></canvas>
+          <canvas class="trend-chart" id="chart-daily-9415" height="190"></canvas>
           <script>
-            new Chart(document.getElementById("chart-daily-8962"), {
+            new Chart(document.getElementById("chart-daily-9415"), {
               type: "line",
               data: {
                 labels: ["2026-10-02", "2026-10-03", "2026-10-04", "2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10", "2026-10-11", "2026-10-12", "2026-10-13", "2026-10-14", "2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31"],
@@ -450,67 +468,80 @@
             });
           </script>
 
-          <span class="label chart-label">Daily composite score vs US Dollar Index (DX-Y.NYB close), last 30 days</span>
-          <canvas class="trend-chart px-chart" id="chart-px-8962" height="230"></canvas>
+          <div class="signal signal-quiet"><div class="signal-head"><span class="badge">No signal</span><span class="muted small">as of 2026-10-30 &middot; 5-day windows, normal range = 1 std dev of own history</span></div><div class="signal-body mono"><div>At least one series is inside its normal 5-day range.</div><div>Composite 5-day change +0.12 (normal range ±3.05) &middot; DXY 5-day change +0.07% (normal range ±0.51%)</div><div>Expected sign -1 (DXY falls as the score) &middot; Realized correlation insufficient data (35 of 60 days)</div><div>10Y yield change (regime) 5-day change: -5.9bp</div><div>Regime: Mixed (DXY and 10Y yield moving opposite ways)</div></div></div>
+
+          <span class="label chart-label">Daily composite vs DXY and 10Y yield change (regime), last 30 days</span>
+          <div class="px-wrap"><canvas class="px-canvas" id="chart-px-9415"></canvas></div>
           <script>
-            new Chart(document.getElementById("chart-px-8962"), {
-              type: "line",
-              data: {
-                labels: ["2026-10-02", "2026-10-03", "2026-10-04", "2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10", "2026-10-11", "2026-10-12", "2026-10-13", "2026-10-14", "2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31"],
-                datasets: [
-                  {
-                    label: "Composite",
-                    data: [-7.058, -6.845, -10.375, -8.74, -9.302, -7.248, -4.76, -7.635, -9.655, -9.231, -10.338, -10.385, -11.244, -9.416, -10.58, -10.324, -9.774, -13.652, -12.79, -11.495, -10.197, -9.09, -8.708, -9.268, -10.529, -9.944, -8.713, -10.316, -8.973, -11.441],
-                    yAxisID: "yScore",
-                    borderColor: "#4C8CA8",
-                    borderWidth: 1.5,
-                    pointRadius: 2,
-                    pointBackgroundColor: "#4C8CA8",
-                    tension: 0.15,
-                    fill: false,
-                  },
-                  {
-                    label: "DX-Y.NYB",
-                    data: [101.93, null, null, 102.17, 101.83, 102.24, 102.14, 102.21, null, null, 102.58, 102.18, 102.55, 102.0, 101.84, null, null, 101.98, 101.73, 101.78, 101.61, 101.81, null, null, 101.96, 102.32, 102.19, 102.04, 101.88, null],
-                    yAxisID: "yPrice",
-                    borderColor: "#E7E5DE",
-                    borderWidth: 1.5,
-                    pointRadius: 2,
-                    pointBackgroundColor: "#E7E5DE",
-                    tension: 0.15,
-                    spanGaps: true,
-                    fill: false,
-                  },
-                ]
-              },
-              options: {
-                responsive: true,
-                interaction: { mode: "index", intersect: false },
-                plugins: {
-                  legend: { display: true, labels: { color: "#8a8f9c", boxWidth: 12, font: { family: "IBM Plex Mono", size: 10 } } },
-                  tooltip: { enabled: true },
-                },
-                scales: {
-                  x: {
-                    ticks: { color: "#8a8f9c", maxTicksLimit: 6, font: { family: "IBM Plex Mono", size: 10 } },
-                    grid: { color: "#2a2e3a" },
-                  },
-                  yScore: {
-                    position: "left",
-                    title: { display: true, text: "Composite", color: "#4C8CA8", font: { size: 10 } },
-                    ticks: { color: "#4C8CA8", font: { family: "IBM Plex Mono", size: 10 } },
-                    grid: { color: "#2a2e3a" },
-                  },
-                  yPrice: {
-                    position: "right",
-                    title: { display: true, text: "DX-Y.NYB", color: "#E7E5DE", font: { size: 10 } },
-                    ticks: { color: "#E7E5DE", font: { family: "IBM Plex Mono", size: 10 } },
-                    grid: { drawOnChartArea: false },
-                  },
-                },
+(function () {
+  var rollFlags = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
+  var raws = [null, [101.93, null, null, 102.17, 101.83, 102.24, 102.14, 102.21, null, null, 102.58, 102.18, 102.55, 102.0, 101.84, null, null, 101.98, 101.73, 101.78, 101.61, 101.81, null, null, 101.96, 102.32, 102.19, 102.04, 101.88, null], [5.277, null, null, 5.311, 5.269, 5.277, 5.231, 5.244, null, null, 5.24, 5.217, 5.19, 5.089, 5.098, null, null, 5.136, 5.117, 5.146, 4.953, 4.988, null, null, 4.986, 4.993, 5.045, 4.989, 4.929, null]];
+  var units = ["", "%", "bp"];
+  new Chart(document.getElementById("chart-px-9415"), {
+    type: "line",
+    data: {
+      labels: ["2026-10-02", "2026-10-03", "2026-10-04", "2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10", "2026-10-11", "2026-10-12", "2026-10-13", "2026-10-14", "2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31"],
+      datasets: [
+        { label: "Composite", data: [-7.058, -6.845, -10.375, -8.74, -9.302, -7.248, -4.76, -7.635, -9.655, -9.231, -10.338, -10.385, -11.244, -9.416, -10.58, -10.324, -9.774, -13.652, -12.79, -11.495, -10.197, -9.09, -8.708, -9.268, -10.529, -9.944, -8.713, -10.316, -8.973, -11.441], yAxisID: "yScore", borderColor: "#4C8CA8",
+          backgroundColor: "#4C8CA8", borderWidth: 1.5, pointRadius: 2, tension: 0.15, fill: false },
+        { label: "DXY", data: [0.0, null, null, 0.235, -0.098, 0.304, 0.206, 0.275, null, null, 0.638, 0.245, 0.608, 0.069, -0.088, null, null, 0.049, -0.196, -0.147, -0.314, -0.118, null, null, 0.029, 0.383, 0.255, 0.108, -0.049, null], yAxisID: "yPrice", borderColor: "#E7E5DE",
+          backgroundColor: "#E7E5DE", borderWidth: 1.5, pointRadius: 2, tension: 0.15, spanGaps: true, fill: false },
+        { label: "10Y yield change (regime)", data: [0.0, null, null, 3.4, -0.8, 0.0, -4.6, -3.3, null, null, -3.7, -6.0, -8.7, -18.8, -17.9, null, null, -14.1, -16.0, -13.1, -32.4, -28.9, null, null, -29.1, -28.4, -23.2, -28.8, -34.8, null], yAxisID: "yYield", borderColor: "#B48EAD",
+          backgroundColor: "#B48EAD", borderWidth: 1.5, borderDash: [5, 3], pointRadius: 2, tension: 0.15,
+          spanGaps: true, fill: false },
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        legend: { display: true, labels: { color: "#8a8f9c", boxWidth: 12, font: { family: "IBM Plex Mono", size: 11 } } },
+        tooltip: {
+          callbacks: {
+            label: function (ctx) {
+              var v = ctx.parsed.y;
+              if (v === null || v === undefined) return ctx.dataset.label + ": n/a";
+              var raw = raws[ctx.datasetIndex];
+              var tail = raw && raw[ctx.dataIndex] !== null ? "  (close " + raw[ctx.dataIndex] + ")" : "";
+              return ctx.dataset.label + ": " + v.toFixed(2) + units[ctx.datasetIndex] + tail;
+            },
+            footer: function (items) {
+              for (var i = 0; i < items.length; i++) {
+                if (items[i].datasetIndex === 2 && rollFlags[items[i].dataIndex]) {
+                  return "Large 1-day jump on this futures series (possible contract roll)";
+                }
               }
-            });
-          </script>
+              return "";
+            }
+          }
+        },
+      },
+      scales: {
+        x: { ticks: { color: "#8a8f9c", maxTicksLimit: 8, font: { family: "IBM Plex Mono", size: 10 } }, grid: { color: "#2a2e3a" } },
+        yScore: {
+          position: "left",
+          title: { display: true, text: "Daily composite", color: "#4C8CA8", font: { size: 11 } },
+          ticks: { color: "#4C8CA8", font: { family: "IBM Plex Mono", size: 10 } },
+          grid: { color: "#2a2e3a" },
+        },
+        yPrice: {
+          position: "right",
+          title: { display: true, text: "DXY change since start (%)", color: "#E7E5DE", font: { size: 11 } },
+          ticks: { color: "#E7E5DE", font: { family: "IBM Plex Mono", size: 10 }, callback: function (v) { return v + "%"; } },
+          grid: { drawOnChartArea: false },
+        },
+        yYield: {
+          position: "right",
+          title: { display: true, text: "10Y yield change (bp)", color: "#B48EAD", font: { size: 11 } },
+          ticks: { color: "#B48EAD", font: { family: "IBM Plex Mono", size: 10 } },
+          grid: { drawOnChartArea: false },
+        },
+      },
+    }
+  });
+})();
+</script>
         </div>
       </div>
     </section>
@@ -519,53 +550,53 @@
     <section class="panel slide" data-bucket="Trade Wars & Escalations" style="--accent: #C89B3C">
       <div class="panel-head">
         <h2>Trade Wars & Escalations</h2>
-        <span class="timestamp">as of 2026-11-01T05:50:30+00:00</span>
+        <span class="timestamp">as of 2026-11-01T06:20:45+00:00</span>
       </div>
 
       <div class="panel-body">
         <div class="panel-left">
           <div class="score-row">
-            <div class="score">+7.48</div>
-            <span class="delta">▲ +1.23 vs prior run</span>
+            <div class="score">+5.92</div>
+            <span class="delta">▼ -1.56 vs prior run</span>
           </div>
 
           <div class="breakdown">
             <div>
               <span class="label">Risk coverage</span>
-              <span class="value">40 articles, tone -0.22 (vader)</span>
+              <span class="value">40 articles, tone -0.20 (vader)</span>
             </div>
             <div>
               <span class="label">De-escalation coverage</span>
-              <span class="value">31 articles, tone +0.09 (vader)</span>
+              <span class="value">32 articles, tone +0.13 (vader)</span>
             </div>
           </div>
 
           <div class="headlines">
             <span class="label">Top risk headlines this run</span>
-            <ul><li><a href="https://news.google.com/rss/articles/CBMilwFBVV95cUxPWHNLYXliS0ZKXzAyRW1FTjJtSm8yMzlzM2lTVzdrcUF2N2ZPV0dPSmc2c1dlMVlRcDY1dEx2QUNqb3d1V2twWDBsQTlGaWVzaUNlQ1ktREp3LWd1cnRzLTRtY25CcGl2Y0JQTXRIeW1FbDhZNUJHc2JlWFU0M0NWMGg2T2hjbWVkMHhzRG13QVg2M1hIVk04?oc=5" target="_blank" rel="noopener">Beijing threatens retaliation if UK follows EU in restricting Chinese EVs - Automotive News</a></li>
-<li><a href="https://news.google.com/rss/articles/CBMiowFBVV95cUxNTi1NSHF1UWgxb21LUlk1aXdYZm1UTFJOMWtGMC1BNEpCa2ZXMld4Y0tZVHpmZ3dxeUdwaGdiQk1EcXo5b2k3eDFrakxUQm1JVFNwRHEtZVlxVGU2TFhDXzZxSmlkY1R5YjZwS1FHWDFqN1NqckF6NmhEcnVGaTFMdUZuT0pjVzZIX2YxenFDaUlvLUxjRjVGaEdpTllUaFdNbWY0?oc=5" target="_blank" rel="noopener">The Doomed “Allied Scale” Strategy for Competing with China - China-US Focus</a></li>
-<li><a href="https://news.google.com/rss/articles/CBMilgFBVV95cUxNdXFOOE9ybUFrVGNraFdvaWNEdDM1YXlVdU1xTVNFdW1aTUVlYkNyeUtoRGJVNXJkeUF3WXE4Y3c0ZVJsTldybDA4UFEydDdEcUN0TnBlTHVJcnhDb1ZPSTBMcFBLSU5fdERrRlNONEx4bUItMEZiaVRLMzBmbnFBLVRLTTR4MlZzNFl2UE1IMlc0VURjeUE?oc=5" target="_blank" rel="noopener">Washing away the US: Tariff evasion on the other side of the US–China trade war - CEPR</a></li></ul>
+            <ul><li><a href="https://news.google.com/rss/articles/CBMivwFBVV95cUxPR21QVmJISUl6amZFN3NjaC1DSjVuQTQ3RWFhNExoa1N1b1VkUlIzb09qdXkxakFGWklHYVJlak05b1NjVVNocVRJU3FucVpMYzZlUGttTXJ5TS1MTHMxVFRxMTB3VDVJNHBneWYxam1QdE95WERoTmt5MS1ZTnpOTVlNa0c0QW9VWm41U3JFaDdFTlhWb2JwbzAwMV9IclNDczROQWRINExidGtqNnBXVmdZSjllTkJ4TWRxd1ZkSQ?oc=5" target="_blank" rel="noopener">Trump escalates trade war with Canada, moving to ban imports of some motorcycles, dairy and alcohol - NBC News</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMiswFBVV95cUxOU0daMmZPejJBdEJPWFBJVVFwVFdOTXN4aUhGbmtDaF9KamUzRnVDU0RfdFRZdEdLeWplOGJpeURsckZEXzlpZFRGMi1YOGFGYmx2UHdRT05JaDIxY2VBZ0JsdmJWUlN0T3pmLVd4RGpENjZKZkZ0cmIwZ0FETEFPZUJxdFVFQ09jX3NvRV9WVXkzeGxXRUE1SVZEeHBJZnJ3TDZMRFdMNU95QkZITW9FLTk1Yw?oc=5" target="_blank" rel="noopener">CBP program secures supply chains to better protect the border - Federal News Network</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMipwFBVV95cUxNQkxlS0lHMHZ3aXo0QXcyVFpwQzNsUGRzSzNaelQ3cXo0QU5YSDJ3cEZSdUdfX3g5UGhSc0tvODJ1M0lpeEQ1LVdhT0tuUWI0VFFJeElfVEEzTHEzWUQ5MVpEeG1IWTd2Z0FLbVp2blNKWHk5ZTVMOVVmZEFuZEFUNXZHNVlwTWU1TFFLRFZOM1Y0X3V2VzlxQjBIbTZLcVIzdFZaSF9DSQ?oc=5" target="_blank" rel="noopener">Trade War Escalation Deepens Uncertainty for Canadian Economy - Morningstar</a></li></ul>
           </div>
 
           <div class="headlines">
             <span class="label">Top de-escalation headlines this run</span>
-            <ul><li><a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxOUnFlaGxJY2xCbGluOXE3eC1md0FUaUFKNWp5dmNub1pTYXNySE5ROW1lcGhhbXVrd19wZWxfNmx5SEFnSkhLT05XS2k4bUxRN1RYWkRmcTNldHctb21HSjd4eWxHVDMtU0JHQWowLWtiNUpqQVQxbVJCNnZua2Y2ajZqbHJjWldUaGNNNkx6ckZNMjgyREszSmJrUFFzVXdIWmtDcHNnYlNSUXpKMWt1YVZSdHrSAboBQVVfeXFMT25ObG1uWE9BaGV5QVFhRXp3bkdsZVljWmVka1N0dDdWeC1jNTIxZlZGYU50Y043emVvYllTaktPNTEwSG9NenBqTzVBSkR6SXc1b01ZOC1UWXVWMUdaUWdPclhnMVJFNVE2VTFTcUtPZkk5RWZPajZKc3gtMi16cGhfcTNzWUE5b3VyTmxKVVNiTVZ6YmU3ZFZKSXk0LU1NeUpHSW1OU3pmSW9DUWV2VWNaWUV5Z1BqVnlB?oc=5" target="_blank" rel="noopener">Trump welcomes Xi to Washington as US, China agree to extend trade truce - Al Jazeera</a></li>
-<li><a href="https://news.google.com/rss/articles/CBMinwFBVV95cUxOaElLTzZISkhGRzh3ZFZYbGcxZ21jTHozWXpwM3U1X0N4cXlYRFBpZFczX2E2ZENwdmQ4ZF9abEJfdHc2QmNvOHdUQVJkS1hIOVZhM2Fza0NjQ053TU0xNmdSOWFMUmxBOVA4dHAxZzdZUXZjTEVUSVU4WW9UZ0N6ai1pZHlwRUFnUk5JZDdLcWtrakNaS29xM2xOY2dIeG8?oc=5" target="_blank" rel="noopener">China says it hopes to agree with the US on tariff reductions at ‘an early date’ - AP News</a></li>
-<li><a href="https://news.google.com/rss/articles/CBMiqAFBVV95cUxNOXhLU284Wk1lLWxzb29CdTd5dk1oblhFVmh5clRUdUcwV0txb3FVMUg4S0lBSVdKVGNmOC0yYjFXQ0cwcXg3TnhOV2h1bGFKQ010aVJuVmN4LVNxZXlVMmhrSUstNk5PdnZ3VGlkd2tjU1lOQmg5WkdrMUwzRE5pQWU3cXN3emNFbXRGVlZpZzdEWm81UUVCMi0ycS1GQmlDZm9uQ1Y1c1k?oc=5" target="_blank" rel="noopener">China-Switzerland Free Trade Deal Update: 99.8% Tariff Exemptions - News and Statistics - IndexBox</a></li></ul>
+            <ul><li><a href="https://news.google.com/rss/articles/CBMitwFBVV95cUxQYmFxd3ExRzJUUHBUUzVaem9RRkQxLS13ZTlZMUFxTHJid1RLNVhTNXhHTEQ1V2V5cmNmWUgyNkNjSnd4T0pIb09pZGtJY1pzZkRoWmJpYXFWTUpSZ3ZqbUZwb2YzTTg5SUxRVmZLZEFDd0djcUdMUnBhcldEOGtxR2hZanZHRlNPVGJGUThaTnozTG1LT3dTdHVJekQ4bHBjMnhKZDRvY1dXMURqTWl3Z3lpa3Y0LTQ?oc=5" target="_blank" rel="noopener">BD Wins Tariff Relief Through Manufacturing Pact - Medical Device and Diagnostic industry</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMiqgFBVV95cUxOUFJtSmJiajBvVngzZTdPNmFabG5fdGlDZklITmtMTWJwU1ZDbFhUUlpFclkyZHdVYlJ3Z2VtQXJQTVBvVDEwSEE4cWhNTWZDeFhHdzh5bXVpU19DbFZuQ01LLXVzY040T04wc1hoZ3B0NFFkc2F6OFBaRmhlRFN3Z1dSWWl2bkZlOFhuV21TZjlXT3VFYzBSdHVSeXZTenVKaDBlNnd3a3BZdw?oc=5" target="_blank" rel="noopener">China’s Xi, Swiss president praise trade deal that boosts access - The Kathmandu Post</a></li>
+<li><a href="https://news.google.com/rss/articles/CBMinwFBVV95cUxOaElLTzZISkhGRzh3ZFZYbGcxZ21jTHozWXpwM3U1X0N4cXlYRFBpZFczX2E2ZENwdmQ4ZF9abEJfdHc2QmNvOHdUQVJkS1hIOVZhM2Fza0NjQ053TU0xNmdSOWFMUmxBOVA4dHAxZzdZUXZjTEVUSVU4WW9UZ0N6ai1pZHlwRUFnUk5JZDdLcWtrakNaS29xM2xOY2dIeG8?oc=5" target="_blank" rel="noopener">China says it hopes to agree with the US on tariff reductions at ‘an early date’ - AP News</a></li></ul>
           </div>
         </div>
 
         <div class="panel-right">
           <span class="label chart-label">Composite score, last 24 runs (~4 days)</span>
-          <canvas class="trend-chart" id="chart-4h-30258" height="190"></canvas>
+          <canvas class="trend-chart" id="chart-4h-60336" height="190"></canvas>
           <script>
-            new Chart(document.getElementById("chart-4h-30258"), {
+            new Chart(document.getElementById("chart-4h-60336"), {
               type: "line",
               data: {
-                labels: ["10-25 13h", "10-25 18h", "10-25 22h", "10-26 04h", "10-26 15h", "10-26 21h", "10-27 04h", "10-27 14h", "10-27 20h", "10-28 05h", "10-28 15h", "10-28 20h", "10-29 05h", "10-29 15h", "10-29 21h", "10-30 05h", "10-30 15h", "10-30 20h", "10-31 05h", "10-31 14h", "10-31 19h", "10-31 23h", "11-01 05h", "11-01 05h"],
+                labels: ["10-25 18h", "10-25 22h", "10-26 04h", "10-26 15h", "10-26 21h", "10-27 04h", "10-27 14h", "10-27 20h", "10-28 05h", "10-28 15h", "10-28 20h", "10-29 05h", "10-29 15h", "10-29 21h", "10-30 05h", "10-30 15h", "10-30 20h", "10-31 05h", "10-31 14h", "10-31 19h", "10-31 23h", "11-01 05h", "11-01 05h", "11-01 06h"],
                 datasets: [
                   {
-                    data: [7.971, 6.601, 6.803, 8.552, 6.921, 7.453, 7.932, 7.901, 9.132, 7.376, 5.468, 7.304, 6.859, 6.799, 6.376, 7.596, 6.233, 4.474, 3.892, 6.162, 6.846, 5.844, 6.251, 7.479],
+                    data: [6.601, 6.803, 8.552, 6.921, 7.453, 7.932, 7.901, 9.132, 7.376, 5.468, 7.304, 6.859, 6.799, 6.376, 7.596, 6.233, 4.474, 3.892, 6.162, 6.846, 5.844, 6.251, 7.479, 5.922],
                     borderColor: "#C89B3C",
                     borderWidth: 1.5,
                     pointRadius: 2,
@@ -603,9 +634,9 @@
           </script>
 
           <span class="label chart-label">Daily composite score, last 30 days</span>
-          <canvas class="trend-chart" id="chart-daily-30258" height="190"></canvas>
+          <canvas class="trend-chart" id="chart-daily-60336" height="190"></canvas>
           <script>
-            new Chart(document.getElementById("chart-daily-30258"), {
+            new Chart(document.getElementById("chart-daily-60336"), {
               type: "line",
               data: {
                 labels: ["2026-10-02", "2026-10-03", "2026-10-04", "2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10", "2026-10-11", "2026-10-12", "2026-10-13", "2026-10-14", "2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31"],
@@ -648,67 +679,75 @@
             });
           </script>
 
-          <span class="label chart-label">Daily composite score vs US Dollar Index (DX-Y.NYB close), last 30 days</span>
-          <canvas class="trend-chart px-chart" id="chart-px-30258" height="230"></canvas>
+          <div class="signal signal-quiet"><div class="signal-head"><span class="badge">No signal</span><span class="muted small">as of 2026-10-30 &middot; 5-day windows, normal range = 1 std dev of own history</span></div><div class="signal-body mono"><div>At least one series is inside its normal 5-day range.</div><div>Composite 5-day change -0.76 (normal range ±1.79) &middot; DXY 5-day change +0.07% (normal range ±0.51%)</div><div>Expected sign +1 (DXY rises with the score) &middot; Realized correlation insufficient data (35 of 60 days)</div><div>Gold (context) 5-day change: -2.7%</div></div></div>
+
+          <span class="label chart-label">Daily composite vs DXY and Gold (context), last 30 days</span>
+          <div class="px-wrap"><canvas class="px-canvas" id="chart-px-60336"></canvas></div>
           <script>
-            new Chart(document.getElementById("chart-px-30258"), {
-              type: "line",
-              data: {
-                labels: ["2026-10-02", "2026-10-03", "2026-10-04", "2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10", "2026-10-11", "2026-10-12", "2026-10-13", "2026-10-14", "2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31"],
-                datasets: [
-                  {
-                    label: "Composite",
-                    data: [8.606, 8.89, 9.275, 10.021, 8.647, 8.142, 8.19, 8.778, 8.059, 8.747, 8.003, 7.382, 6.514, 6.762, 6.454, 6.044, 6.172, 7.284, 7.297, 6.6, 6.775, 6.858, 7.779, 7.257, 7.642, 8.322, 6.716, 6.678, 6.101, 5.686],
-                    yAxisID: "yScore",
-                    borderColor: "#C89B3C",
-                    borderWidth: 1.5,
-                    pointRadius: 2,
-                    pointBackgroundColor: "#C89B3C",
-                    tension: 0.15,
-                    fill: false,
-                  },
-                  {
-                    label: "DX-Y.NYB",
-                    data: [101.93, null, null, 102.17, 101.83, 102.24, 102.14, 102.21, null, null, 102.58, 102.18, 102.55, 102.0, 101.84, null, null, 101.98, 101.73, 101.78, 101.61, 101.81, null, null, 101.96, 102.32, 102.19, 102.04, 101.88, null],
-                    yAxisID: "yPrice",
-                    borderColor: "#E7E5DE",
-                    borderWidth: 1.5,
-                    pointRadius: 2,
-                    pointBackgroundColor: "#E7E5DE",
-                    tension: 0.15,
-                    spanGaps: true,
-                    fill: false,
-                  },
-                ]
-              },
-              options: {
-                responsive: true,
-                interaction: { mode: "index", intersect: false },
-                plugins: {
-                  legend: { display: true, labels: { color: "#8a8f9c", boxWidth: 12, font: { family: "IBM Plex Mono", size: 10 } } },
-                  tooltip: { enabled: true },
-                },
-                scales: {
-                  x: {
-                    ticks: { color: "#8a8f9c", maxTicksLimit: 6, font: { family: "IBM Plex Mono", size: 10 } },
-                    grid: { color: "#2a2e3a" },
-                  },
-                  yScore: {
-                    position: "left",
-                    title: { display: true, text: "Composite", color: "#C89B3C", font: { size: 10 } },
-                    ticks: { color: "#C89B3C", font: { family: "IBM Plex Mono", size: 10 } },
-                    grid: { color: "#2a2e3a" },
-                  },
-                  yPrice: {
-                    position: "right",
-                    title: { display: true, text: "DX-Y.NYB", color: "#E7E5DE", font: { size: 10 } },
-                    ticks: { color: "#E7E5DE", font: { family: "IBM Plex Mono", size: 10 } },
-                    grid: { drawOnChartArea: false },
-                  },
-                },
+(function () {
+  var rollFlags = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false];
+  var raws = [null, [101.93, null, null, 102.17, 101.83, 102.24, 102.14, 102.21, null, null, 102.58, 102.18, 102.55, 102.0, 101.84, null, null, 101.98, 101.73, 101.78, 101.61, 101.81, null, null, 101.96, 102.32, 102.19, 102.04, 101.88, null], [4162.3, null, null, 4156.8, 4187.1, 4140.7, 4157.0, 4216.3, null, null, 4190.6, 4177.3, 4107.9, 4170.1, 4181.1, null, null, 4160.1, 4142.6, 4150.0, 4060.4, 4007.9, null, null, 4038.4, 4074.6, 4051.6, 4031.4, 3898.9, null]];
+  var units = ["", "%", "%"];
+  new Chart(document.getElementById("chart-px-60336"), {
+    type: "line",
+    data: {
+      labels: ["2026-10-02", "2026-10-03", "2026-10-04", "2026-10-05", "2026-10-06", "2026-10-07", "2026-10-08", "2026-10-09", "2026-10-10", "2026-10-11", "2026-10-12", "2026-10-13", "2026-10-14", "2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31"],
+      datasets: [
+        { label: "Composite", data: [8.606, 8.89, 9.275, 10.021, 8.647, 8.142, 8.19, 8.778, 8.059, 8.747, 8.003, 7.382, 6.514, 6.762, 6.454, 6.044, 6.172, 7.284, 7.297, 6.6, 6.775, 6.858, 7.779, 7.257, 7.642, 8.322, 6.716, 6.678, 6.101, 5.686], yAxisID: "yScore", borderColor: "#C89B3C",
+          backgroundColor: "#C89B3C", borderWidth: 1.5, pointRadius: 2, tension: 0.15, fill: false },
+        { label: "DXY", data: [0.0, null, null, 0.235, -0.098, 0.304, 0.206, 0.275, null, null, 0.638, 0.245, 0.608, 0.069, -0.088, null, null, 0.049, -0.196, -0.147, -0.314, -0.118, null, null, 0.029, 0.383, 0.255, 0.108, -0.049, null], yAxisID: "yPrice", borderColor: "#E7E5DE",
+          backgroundColor: "#E7E5DE", borderWidth: 1.5, pointRadius: 2, tension: 0.15, spanGaps: true, fill: false },
+        { label: "Gold (context)", data: [0.0, null, null, -0.132, 0.596, -0.519, -0.127, 1.297, null, null, 0.68, 0.36, -1.307, 0.187, 0.452, null, null, -0.053, -0.473, -0.296, -2.448, -3.709, null, null, -2.977, -2.107, -2.66, -3.145, -6.328, null], yAxisID: "yPrice", borderColor: "#7FC8C0",
+          backgroundColor: "#7FC8C0", borderWidth: 1.5, borderDash: [5, 3], pointRadius: 2, tension: 0.15,
+          spanGaps: true, fill: false },
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: "index", intersect: false },
+      plugins: {
+        legend: { display: true, labels: { color: "#8a8f9c", boxWidth: 12, font: { family: "IBM Plex Mono", size: 11 } } },
+        tooltip: {
+          callbacks: {
+            label: function (ctx) {
+              var v = ctx.parsed.y;
+              if (v === null || v === undefined) return ctx.dataset.label + ": n/a";
+              var raw = raws[ctx.datasetIndex];
+              var tail = raw && raw[ctx.dataIndex] !== null ? "  (close " + raw[ctx.dataIndex] + ")" : "";
+              return ctx.dataset.label + ": " + v.toFixed(2) + units[ctx.datasetIndex] + tail;
+            },
+            footer: function (items) {
+              for (var i = 0; i < items.length; i++) {
+                if (items[i].datasetIndex === 2 && rollFlags[items[i].dataIndex]) {
+                  return "Large 1-day jump on this futures series (possible contract roll)";
+                }
               }
-            });
-          </script>
+              return "";
+            }
+          }
+        },
+      },
+      scales: {
+        x: { ticks: { color: "#8a8f9c", maxTicksLimit: 8, font: { family: "IBM Plex Mono", size: 10 } }, grid: { color: "#2a2e3a" } },
+        yScore: {
+          position: "left",
+          title: { display: true, text: "Daily composite", color: "#C89B3C", font: { size: 11 } },
+          ticks: { color: "#C89B3C", font: { family: "IBM Plex Mono", size: 10 } },
+          grid: { color: "#2a2e3a" },
+        },
+        yPrice: {
+          position: "right",
+          title: { display: true, text: "DXY / price change since start (%)", color: "#E7E5DE", font: { size: 11 } },
+          ticks: { color: "#E7E5DE", font: { family: "IBM Plex Mono", size: 10 }, callback: function (v) { return v + "%"; } },
+          grid: { drawOnChartArea: false },
+        },
+        
+      },
+    }
+  });
+})();
+</script>
         </div>
       </div>
     </section>
