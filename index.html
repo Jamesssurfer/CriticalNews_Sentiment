@@ -172,9 +172,9 @@
 
         <div class="panel-right">
           <span class="label chart-label">Composite score, last 24 runs (~4 days)</span>
-          <canvas class="trend-chart" id="chart-4h-10663" height="190"></canvas>
+          <canvas class="trend-chart" id="chart-4h-51596" height="190"></canvas>
           <script>
-            new Chart(document.getElementById("chart-4h-10663"), {
+            new Chart(document.getElementById("chart-4h-51596"), {
               type: "line",
               data: {
                 labels: ["11-05 21h", "11-06 06h", "11-06 15h", "11-06 21h", "11-07 05h", "11-07 14h", "11-07 20h", "11-08 05h", "11-08 15h", "11-08 20h", "11-09 06h", "11-09 18h", "11-10 02h", "11-10 12h", "11-10 21h", "11-11 05h", "11-11 16h", "11-11 22h", "11-12 07h", "11-12 16h", "11-13 01h", "11-13 12h", "11-13 19h", "11-14 00h"],
@@ -218,15 +218,15 @@
           </script>
 
           <span class="label chart-label">Daily composite score, last 30 days</span>
-          <canvas class="trend-chart" id="chart-daily-10663" height="190"></canvas>
+          <canvas class="trend-chart" id="chart-daily-51596" height="190"></canvas>
           <script>
-            new Chart(document.getElementById("chart-daily-10663"), {
+            new Chart(document.getElementById("chart-daily-51596"), {
               type: "line",
               data: {
-                labels: ["2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13"],
+                labels: ["2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13", "2026-11-14"],
                 datasets: [
                   {
-                    data: [16.99, 17.77, 17.474, 19.304, 18.242, 20.936, 19.311, 19.432, 17.958, 19.587, 19.952, 18.718, 17.243, 16.261, 16.491, 14.64, 15.17, 16.202, 16.924, 16.192, 18.044, 18.296, 17.525, 17.473, 17.768, 17.201, 18.224, 18.192, 17.156, 17.767],
+                    data: [17.77, 17.474, 19.304, 18.242, 20.936, 19.311, 19.432, 17.958, 19.587, 19.952, 18.718, 17.243, 16.261, 16.491, 14.64, 15.17, 16.202, 16.924, 16.192, 18.044, 18.296, 17.525, 17.473, 17.768, 17.201, 18.224, 18.192, 17.156, 17.14, 16.24],
                     borderColor: "#C1524B",
                     borderWidth: 1.5,
                     pointRadius: 2,
@@ -267,24 +267,24 @@
       </div>
 
       <div class="px-full">
-        <div class="signal signal-quiet"><div class="signal-head"><span class="badge">No signal</span><span class="muted small">as of 2026-11-13 &middot; 5-day windows, normal range = 1 std dev of own history</span></div><div class="signal-body mono"><div>At least one series is inside its normal 5-day range.</div><div>Composite 5-day change +0.24 (normal range ±2.04) &middot; DXY 5-day change +1.09% (normal range ±0.59%)</div><div>Expected sign +1 (DXY rises with the score) &middot; Realized correlation insufficient data (45 of 60 days)</div><div>Brent (context) 5-day change: -2.3%</div></div></div>
+        <div class="signal signal-quiet"><div class="signal-head"><span class="badge">No signal</span><span class="muted small">as of 2026-11-13 &middot; 5-day windows, normal range = 1 std dev of own history</span></div><div class="signal-body mono"><div>At least one series is inside its normal 5-day range.</div><div>Composite 5-day change -0.38 (normal range ±2.03) &middot; DXY 5-day change +1.09% (normal range ±0.59%)</div><div>Expected sign +1 (DXY rises with the score) &middot; Realized correlation insufficient data (45 of 60 days)</div><div>Brent (context) 5-day change: -2.3%</div></div></div>
         <span class="label chart-label">Daily composite vs DXY and Brent (context), last 30 days</span>
-        <div class="px-wrap"><canvas class="px-canvas" id="chart-px-10663"></canvas></div>
+        <div class="px-wrap"><canvas class="px-canvas" id="chart-px-51596"></canvas></div>
         <script>
 (function () {
-  var rollFlags = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, true, false, false, false, false, true, false, false, false, false];
-  var raws = [null, [102.0, 101.84, null, null, 101.98, 101.73, 101.78, 101.61, 101.81, null, null, 101.96, 102.32, 102.19, 102.04, 101.88, null, null, 101.75, 101.87, 101.51, 101.55, 102.3, null, null, 101.65, 102.23, 102.91, 103.17, 103.411], [105.92, 109.86, null, null, 109.55, 108.79, 108.82, 113.17, 116.72, null, null, 115.81, 113.88, 115.32, 114.88, 117.64, null, null, 104.77, 103.6, 94.62, 98.29, 98.32, null, null, 92.57, 91.49, 92.76, 95.82, 96.08]];
+  var rollFlags = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, true, false, false, false, false, true, false, false, false, false, false];
+  var raws = [null, [101.84, null, null, 101.98, 101.73, 101.78, 101.61, 101.81, null, null, 101.96, 102.32, 102.19, 102.04, 101.88, null, null, 101.75, 101.87, 101.51, 101.55, 102.3, null, null, 101.65, 102.23, 102.91, 103.17, 103.411, null], [109.86, null, null, 109.55, 108.79, 108.82, 113.17, 116.72, null, null, 115.81, 113.88, 115.32, 114.88, 117.64, null, null, 104.77, 103.6, 94.62, 98.29, 98.32, null, null, 92.57, 91.49, 92.76, 95.82, 96.08, null]];
   var units = ["", "%", "%"];
-  new Chart(document.getElementById("chart-px-10663"), {
+  new Chart(document.getElementById("chart-px-51596"), {
     type: "line",
     data: {
-      labels: ["2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13"],
+      labels: ["2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13", "2026-11-14"],
       datasets: [
-        { label: "Composite", data: [16.99, 17.77, 17.474, 19.304, 18.242, 20.936, 19.311, 19.432, 17.958, 19.587, 19.952, 18.718, 17.243, 16.261, 16.491, 14.64, 15.17, 16.202, 16.924, 16.192, 18.044, 18.296, 17.525, 17.473, 17.768, 17.201, 18.224, 18.192, 17.156, 17.767], yAxisID: "yScore", borderColor: "#C1524B",
+        { label: "Composite", data: [17.77, 17.474, 19.304, 18.242, 20.936, 19.311, 19.432, 17.958, 19.587, 19.952, 18.718, 17.243, 16.261, 16.491, 14.64, 15.17, 16.202, 16.924, 16.192, 18.044, 18.296, 17.525, 17.473, 17.768, 17.201, 18.224, 18.192, 17.156, 17.14, 16.24], yAxisID: "yScore", borderColor: "#C1524B",
           backgroundColor: "#C1524B", borderWidth: 1.5, pointRadius: 2, tension: 0.15, fill: false },
-        { label: "DXY", data: [0.0, -0.157, null, null, -0.02, -0.265, -0.216, -0.382, -0.186, null, null, -0.039, 0.314, 0.186, 0.039, -0.118, null, null, -0.245, -0.127, -0.48, -0.441, 0.294, null, null, -0.343, 0.225, 0.892, 1.147, 1.383], yAxisID: "yPrice", borderColor: "#E7E5DE",
+        { label: "DXY", data: [0.0, null, null, 0.137, -0.108, -0.059, -0.226, -0.029, null, null, 0.118, 0.471, 0.344, 0.196, 0.039, null, null, -0.088, 0.029, -0.324, -0.285, 0.452, null, null, -0.187, 0.383, 1.051, 1.306, 1.543, null], yAxisID: "yPrice", borderColor: "#E7E5DE",
           backgroundColor: "#E7E5DE", borderWidth: 1.5, pointRadius: 2, tension: 0.15, spanGaps: true, fill: false },
-        { label: "Brent (context)", data: [0.0, 3.72, null, null, 3.427, 2.71, 2.738, 6.845, 10.196, null, null, 9.337, 7.515, 8.875, 8.459, 11.065, null, null, -1.086, -2.19, -10.668, -7.204, -7.175, null, null, -12.604, -13.623, -12.424, -9.535, -9.29], yAxisID: "yCtx", borderColor: "#7FB069",
+        { label: "Brent (context)", data: [0.0, null, null, -0.282, -0.974, -0.947, 3.013, 6.244, null, null, 5.416, 3.659, 4.97, 4.569, 7.082, null, null, -4.633, -5.698, -13.872, -10.532, -10.504, null, null, -15.738, -16.721, -15.565, -12.78, -12.543, null], yAxisID: "yCtx", borderColor: "#7FB069",
           backgroundColor: "#7FB069", borderWidth: 1.5, borderDash: [5, 3], pointRadius: 2, tension: 0.15,
           spanGaps: true, fill: false },
       ]
@@ -385,9 +385,9 @@
 
         <div class="panel-right">
           <span class="label chart-label">Composite score, last 24 runs (~4 days)</span>
-          <canvas class="trend-chart" id="chart-4h-88925" height="190"></canvas>
+          <canvas class="trend-chart" id="chart-4h-10124" height="190"></canvas>
           <script>
-            new Chart(document.getElementById("chart-4h-88925"), {
+            new Chart(document.getElementById("chart-4h-10124"), {
               type: "line",
               data: {
                 labels: ["11-05 21h", "11-06 06h", "11-06 15h", "11-06 21h", "11-07 05h", "11-07 14h", "11-07 20h", "11-08 05h", "11-08 15h", "11-08 20h", "11-09 06h", "11-09 18h", "11-10 02h", "11-10 12h", "11-10 21h", "11-11 05h", "11-11 16h", "11-11 22h", "11-12 07h", "11-12 16h", "11-13 01h", "11-13 12h", "11-13 19h", "11-14 00h"],
@@ -431,15 +431,15 @@
           </script>
 
           <span class="label chart-label">Daily composite score, last 30 days</span>
-          <canvas class="trend-chart" id="chart-daily-88925" height="190"></canvas>
+          <canvas class="trend-chart" id="chart-daily-10124" height="190"></canvas>
           <script>
-            new Chart(document.getElementById("chart-daily-88925"), {
+            new Chart(document.getElementById("chart-daily-10124"), {
               type: "line",
               data: {
-                labels: ["2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13"],
+                labels: ["2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13", "2026-11-14"],
                 datasets: [
                   {
-                    data: [-9.416, -10.58, -10.324, -9.774, -13.652, -12.79, -11.495, -10.197, -9.09, -8.708, -9.268, -10.529, -9.944, -8.713, -10.316, -8.973, -11.441, -12.17, -10.724, -8.022, -9.36, -8.415, -9.426, -8.924, -9.911, -10.418, -11.434, -10.606, -8.665, -7.674],
+                    data: [-10.58, -10.324, -9.774, -13.652, -12.79, -11.495, -10.197, -9.09, -8.708, -9.268, -10.529, -9.944, -8.713, -10.316, -8.973, -11.441, -12.17, -10.724, -8.022, -9.36, -8.415, -9.426, -8.924, -9.911, -10.418, -11.434, -10.606, -8.665, -8.802, -10.654],
                     borderColor: "#4C8CA8",
                     borderWidth: 1.5,
                     pointRadius: 2,
@@ -480,24 +480,24 @@
       </div>
 
       <div class="px-full">
-        <div class="signal signal-quiet"><div class="signal-head"><span class="badge">No signal</span><span class="muted small">as of 2026-11-13 &middot; 5-day windows, normal range = 1 std dev of own history</span></div><div class="signal-body mono"><div>At least one series is inside its normal 5-day range.</div><div>Composite 5-day change +1.75 (normal range ±2.42) &middot; DXY 5-day change +1.09% (normal range ±0.59%)</div><div>Expected sign -1 (DXY falls as the score) &middot; Realized correlation insufficient data (45 of 60 days)</div><div>10Y yield change (regime) 5-day change: +29.5bp</div><div>Regime: Hawkish regime (DXY up, 10Y yield up)</div></div></div>
+        <div class="signal signal-quiet"><div class="signal-head"><span class="badge">No signal</span><span class="muted small">as of 2026-11-13 &middot; 5-day windows, normal range = 1 std dev of own history</span></div><div class="signal-body mono"><div>At least one series is inside its normal 5-day range.</div><div>Composite 5-day change +0.62 (normal range ±2.41) &middot; DXY 5-day change +1.09% (normal range ±0.59%)</div><div>Expected sign -1 (DXY falls as the score) &middot; Realized correlation insufficient data (45 of 60 days)</div><div>10Y yield change (regime) 5-day change: +29.5bp</div><div>Regime: Hawkish regime (DXY up, 10Y yield up)</div></div></div>
         <span class="label chart-label">Daily composite vs DXY and 10Y yield change (regime), last 30 days</span>
-        <div class="px-wrap"><canvas class="px-canvas" id="chart-px-88925"></canvas></div>
+        <div class="px-wrap"><canvas class="px-canvas" id="chart-px-10124"></canvas></div>
         <script>
 (function () {
   var rollFlags = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false];
-  var raws = [null, [102.0, 101.84, null, null, 101.98, 101.73, 101.78, 101.61, 101.81, null, null, 101.96, 102.32, 102.19, 102.04, 101.88, null, null, 101.75, 101.87, 101.51, 101.55, 102.3, null, null, 101.65, 102.23, 102.91, 103.17, 103.411], [5.089, 5.098, null, null, 5.136, 5.117, 5.146, 4.953, 4.988, null, null, 4.986, 4.993, 5.045, 4.989, 4.929, null, null, 4.894, 4.952, 4.894, 4.837, 4.859, null, null, 4.864, 4.983, 4.998, 5.103, 5.154]];
+  var raws = [null, [101.84, null, null, 101.98, 101.73, 101.78, 101.61, 101.81, null, null, 101.96, 102.32, 102.19, 102.04, 101.88, null, null, 101.75, 101.87, 101.51, 101.55, 102.3, null, null, 101.65, 102.23, 102.91, 103.17, 103.411, null], [5.098, null, null, 5.136, 5.117, 5.146, 4.953, 4.988, null, null, 4.986, 4.993, 5.045, 4.989, 4.929, null, null, 4.894, 4.952, 4.894, 4.837, 4.859, null, null, 4.864, 4.983, 4.998, 5.103, 5.154, null]];
   var units = ["", "%", "bp"];
-  new Chart(document.getElementById("chart-px-88925"), {
+  new Chart(document.getElementById("chart-px-10124"), {
     type: "line",
     data: {
-      labels: ["2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13"],
+      labels: ["2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13", "2026-11-14"],
       datasets: [
-        { label: "Composite", data: [-9.416, -10.58, -10.324, -9.774, -13.652, -12.79, -11.495, -10.197, -9.09, -8.708, -9.268, -10.529, -9.944, -8.713, -10.316, -8.973, -11.441, -12.17, -10.724, -8.022, -9.36, -8.415, -9.426, -8.924, -9.911, -10.418, -11.434, -10.606, -8.665, -7.674], yAxisID: "yScore", borderColor: "#4C8CA8",
+        { label: "Composite", data: [-10.58, -10.324, -9.774, -13.652, -12.79, -11.495, -10.197, -9.09, -8.708, -9.268, -10.529, -9.944, -8.713, -10.316, -8.973, -11.441, -12.17, -10.724, -8.022, -9.36, -8.415, -9.426, -8.924, -9.911, -10.418, -11.434, -10.606, -8.665, -8.802, -10.654], yAxisID: "yScore", borderColor: "#4C8CA8",
           backgroundColor: "#4C8CA8", borderWidth: 1.5, pointRadius: 2, tension: 0.15, fill: false },
-        { label: "DXY", data: [0.0, -0.157, null, null, -0.02, -0.265, -0.216, -0.382, -0.186, null, null, -0.039, 0.314, 0.186, 0.039, -0.118, null, null, -0.245, -0.127, -0.48, -0.441, 0.294, null, null, -0.343, 0.225, 0.892, 1.147, 1.383], yAxisID: "yPrice", borderColor: "#E7E5DE",
+        { label: "DXY", data: [0.0, null, null, 0.137, -0.108, -0.059, -0.226, -0.029, null, null, 0.118, 0.471, 0.344, 0.196, 0.039, null, null, -0.088, 0.029, -0.324, -0.285, 0.452, null, null, -0.187, 0.383, 1.051, 1.306, 1.543, null], yAxisID: "yPrice", borderColor: "#E7E5DE",
           backgroundColor: "#E7E5DE", borderWidth: 1.5, pointRadius: 2, tension: 0.15, spanGaps: true, fill: false },
-        { label: "10Y yield change (regime)", data: [0.0, 0.9, null, null, 4.7, 2.8, 5.7, -13.6, -10.1, null, null, -10.3, -9.6, -4.4, -10.0, -16.0, null, null, -19.5, -13.7, -19.5, -25.2, -23.0, null, null, -22.5, -10.6, -9.1, 1.4, 6.5], yAxisID: "yCtx", borderColor: "#B48EAD",
+        { label: "10Y yield change (regime)", data: [0.0, null, null, 3.8, 1.9, 4.8, -14.5, -11.0, null, null, -11.2, -10.5, -5.3, -10.9, -16.9, null, null, -20.4, -14.6, -20.4, -26.1, -23.9, null, null, -23.4, -11.5, -10.0, 0.5, 5.6, null], yAxisID: "yCtx", borderColor: "#B48EAD",
           backgroundColor: "#B48EAD", borderWidth: 1.5, borderDash: [5, 3], pointRadius: 2, tension: 0.15,
           spanGaps: true, fill: false },
       ]
@@ -598,9 +598,9 @@
 
         <div class="panel-right">
           <span class="label chart-label">Composite score, last 24 runs (~4 days)</span>
-          <canvas class="trend-chart" id="chart-4h-13946" height="190"></canvas>
+          <canvas class="trend-chart" id="chart-4h-33683" height="190"></canvas>
           <script>
-            new Chart(document.getElementById("chart-4h-13946"), {
+            new Chart(document.getElementById("chart-4h-33683"), {
               type: "line",
               data: {
                 labels: ["11-05 21h", "11-06 06h", "11-06 15h", "11-06 21h", "11-07 05h", "11-07 14h", "11-07 20h", "11-08 05h", "11-08 15h", "11-08 20h", "11-09 06h", "11-09 18h", "11-10 02h", "11-10 12h", "11-10 21h", "11-11 05h", "11-11 16h", "11-11 22h", "11-12 07h", "11-12 16h", "11-13 01h", "11-13 12h", "11-13 19h", "11-14 00h"],
@@ -644,15 +644,15 @@
           </script>
 
           <span class="label chart-label">Daily composite score, last 30 days</span>
-          <canvas class="trend-chart" id="chart-daily-13946" height="190"></canvas>
+          <canvas class="trend-chart" id="chart-daily-33683" height="190"></canvas>
           <script>
-            new Chart(document.getElementById("chart-daily-13946"), {
+            new Chart(document.getElementById("chart-daily-33683"), {
               type: "line",
               data: {
-                labels: ["2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13"],
+                labels: ["2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13", "2026-11-14"],
                 datasets: [
                   {
-                    data: [6.762, 6.454, 6.044, 6.172, 7.284, 7.297, 6.6, 6.775, 6.858, 7.779, 7.257, 7.642, 8.322, 6.716, 6.678, 6.101, 5.686, 6.414, 7.656, 7.828, 6.811, 6.534, 5.341, 5.105, 5.891, 5.67, 6.441, 6.361, 5.58, 5.841],
+                    data: [6.454, 6.044, 6.172, 7.284, 7.297, 6.6, 6.775, 6.858, 7.779, 7.257, 7.642, 8.322, 6.716, 6.678, 6.101, 5.686, 6.414, 7.656, 7.828, 6.811, 6.534, 5.341, 5.105, 5.891, 5.67, 6.441, 6.361, 5.58, 5.957, 5.012],
                     borderColor: "#C89B3C",
                     borderWidth: 1.5,
                     pointRadius: 2,
@@ -693,24 +693,24 @@
       </div>
 
       <div class="px-full">
-        <div class="signal signal-quiet"><div class="signal-head"><span class="badge">No signal</span><span class="muted small">as of 2026-11-13 &middot; 5-day windows, normal range = 1 std dev of own history</span></div><div class="signal-body mono"><div>At least one series is inside its normal 5-day range.</div><div>Composite 5-day change +0.50 (normal range ±1.26) &middot; DXY 5-day change +1.09% (normal range ±0.59%)</div><div>Expected sign +1 (DXY rises with the score) &middot; Realized correlation insufficient data (45 of 60 days)</div><div>Gold (context) 5-day change: -4.6%</div></div></div>
+        <div class="signal signal-quiet"><div class="signal-head"><span class="badge">No signal</span><span class="muted small">as of 2026-11-13 &middot; 5-day windows, normal range = 1 std dev of own history</span></div><div class="signal-body mono"><div>At least one series is inside its normal 5-day range.</div><div>Composite 5-day change +0.62 (normal range ±1.26) &middot; DXY 5-day change +1.09% (normal range ±0.59%)</div><div>Expected sign +1 (DXY rises with the score) &middot; Realized correlation insufficient data (45 of 60 days)</div><div>Gold (context) 5-day change: -4.6%</div></div></div>
         <span class="label chart-label">Daily composite vs DXY and Gold (context), last 30 days</span>
-        <div class="px-wrap"><canvas class="px-canvas" id="chart-px-13946"></canvas></div>
+        <div class="px-wrap"><canvas class="px-canvas" id="chart-px-33683"></canvas></div>
         <script>
 (function () {
-  var rollFlags = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, true, false, false, false, false, false, false, false, true, false];
-  var raws = [null, [102.0, 101.84, null, null, 101.98, 101.73, 101.78, 101.61, 101.81, null, null, 101.96, 102.32, 102.19, 102.04, 101.88, null, null, 101.75, 101.87, 101.51, 101.55, 102.3, null, null, 101.65, 102.23, 102.91, 103.17, 103.411], [4170.1, 4181.1, null, null, 4160.1, 4142.6, 4150.0, 4060.4, 4007.9, null, null, 4038.4, 4074.6, 4051.6, 4031.4, 3898.9, null, null, 3969.6, 3940.4, 4073.0, 4113.5, 4074.9, null, null, 4114.5, 4030.2, 4000.5, 3885.3, 3887.6]];
+  var rollFlags = [false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, true, false, false, false, false, false, false, false, true, false, false];
+  var raws = [null, [101.84, null, null, 101.98, 101.73, 101.78, 101.61, 101.81, null, null, 101.96, 102.32, 102.19, 102.04, 101.88, null, null, 101.75, 101.87, 101.51, 101.55, 102.3, null, null, 101.65, 102.23, 102.91, 103.17, 103.411, null], [4181.1, null, null, 4160.1, 4142.6, 4150.0, 4060.4, 4007.9, null, null, 4038.4, 4074.6, 4051.6, 4031.4, 3898.9, null, null, 3969.6, 3940.4, 4073.0, 4113.5, 4074.9, null, null, 4114.5, 4030.2, 4000.5, 3885.3, 3887.6, null]];
   var units = ["", "%", "%"];
-  new Chart(document.getElementById("chart-px-13946"), {
+  new Chart(document.getElementById("chart-px-33683"), {
     type: "line",
     data: {
-      labels: ["2026-10-15", "2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13"],
+      labels: ["2026-10-16", "2026-10-17", "2026-10-18", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-10-31", "2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-07", "2026-11-08", "2026-11-09", "2026-11-10", "2026-11-11", "2026-11-12", "2026-11-13", "2026-11-14"],
       datasets: [
-        { label: "Composite", data: [6.762, 6.454, 6.044, 6.172, 7.284, 7.297, 6.6, 6.775, 6.858, 7.779, 7.257, 7.642, 8.322, 6.716, 6.678, 6.101, 5.686, 6.414, 7.656, 7.828, 6.811, 6.534, 5.341, 5.105, 5.891, 5.67, 6.441, 6.361, 5.58, 5.841], yAxisID: "yScore", borderColor: "#C89B3C",
+        { label: "Composite", data: [6.454, 6.044, 6.172, 7.284, 7.297, 6.6, 6.775, 6.858, 7.779, 7.257, 7.642, 8.322, 6.716, 6.678, 6.101, 5.686, 6.414, 7.656, 7.828, 6.811, 6.534, 5.341, 5.105, 5.891, 5.67, 6.441, 6.361, 5.58, 5.957, 5.012], yAxisID: "yScore", borderColor: "#C89B3C",
           backgroundColor: "#C89B3C", borderWidth: 1.5, pointRadius: 2, tension: 0.15, fill: false },
-        { label: "DXY", data: [0.0, -0.157, null, null, -0.02, -0.265, -0.216, -0.382, -0.186, null, null, -0.039, 0.314, 0.186, 0.039, -0.118, null, null, -0.245, -0.127, -0.48, -0.441, 0.294, null, null, -0.343, 0.225, 0.892, 1.147, 1.383], yAxisID: "yPrice", borderColor: "#E7E5DE",
+        { label: "DXY", data: [0.0, null, null, 0.137, -0.108, -0.059, -0.226, -0.029, null, null, 0.118, 0.471, 0.344, 0.196, 0.039, null, null, -0.088, 0.029, -0.324, -0.285, 0.452, null, null, -0.187, 0.383, 1.051, 1.306, 1.543, null], yAxisID: "yPrice", borderColor: "#E7E5DE",
           backgroundColor: "#E7E5DE", borderWidth: 1.5, pointRadius: 2, tension: 0.15, spanGaps: true, fill: false },
-        { label: "Gold (context)", data: [0.0, 0.264, null, null, -0.24, -0.659, -0.482, -2.631, -3.89, null, null, -3.158, -2.29, -2.842, -3.326, -6.503, null, null, -4.808, -5.508, -2.328, -1.357, -2.283, null, null, -1.333, -3.355, -4.067, -6.83, -6.774], yAxisID: "yCtx", borderColor: "#7FC8C0",
+        { label: "Gold (context)", data: [0.0, null, null, -0.502, -0.921, -0.744, -2.887, -4.142, null, null, -3.413, -2.547, -3.097, -3.58, -6.749, null, null, -5.058, -5.757, -2.585, -1.617, -2.54, null, null, -1.593, -3.609, -4.319, -7.075, -7.02, null], yAxisID: "yCtx", borderColor: "#7FC8C0",
           backgroundColor: "#7FC8C0", borderWidth: 1.5, borderDash: [5, 3], pointRadius: 2, tension: 0.15,
           spanGaps: true, fill: false },
       ]
@@ -779,7 +779,7 @@
               <summary>Week of Nov 09 – Nov 15</summary>
               <table class="daily-table">
                 <thead><tr><th>Date</th><th>Middle East Oil Risk</th><th>Macroeconomic Interventions</th><th>Trade Wars & Escalations</th></tr></thead>
-                <tbody><tr><td>2026-11-13</td><td>+17.77 <span class="muted">(n/a)</span></td><td>-7.67 <span class="muted">(n/a)</span></td><td>+5.84 <span class="muted">(n/a)</span></td></tr><tr><td>2026-11-12</td><td>+17.16 <span class="muted">(n/a)</span></td><td>-8.66 <span class="muted">(n/a)</span></td><td>+5.58 <span class="muted">(n/a)</span></td></tr><tr><td>2026-11-11</td><td>+18.19 <span class="muted">(n/a)</span></td><td>-10.61 <span class="muted">(n/a)</span></td><td>+6.36 <span class="muted">(n/a)</span></td></tr><tr><td>2026-11-10</td><td>+18.22 <span class="muted">(n/a)</span></td><td>-11.43 <span class="muted">(n/a)</span></td><td>+6.44 <span class="muted">(n/a)</span></td></tr><tr><td>2026-11-09</td><td>+17.20 <span class="muted">(n/a)</span></td><td>-10.42 <span class="muted">(n/a)</span></td><td>+5.67 <span class="muted">(n/a)</span></td></tr></tbody>
+                <tbody><tr><td>2026-11-14</td><td>+16.24 <span class="muted">(n/a)</span></td><td>-10.65 <span class="muted">(n/a)</span></td><td>+5.01 <span class="muted">(n/a)</span></td></tr><tr><td>2026-11-13</td><td>+17.14 <span class="muted">(n/a)</span></td><td>-8.80 <span class="muted">(n/a)</span></td><td>+5.96 <span class="muted">(n/a)</span></td></tr><tr><td>2026-11-12</td><td>+17.16 <span class="muted">(n/a)</span></td><td>-8.66 <span class="muted">(n/a)</span></td><td>+5.58 <span class="muted">(n/a)</span></td></tr><tr><td>2026-11-11</td><td>+18.19 <span class="muted">(n/a)</span></td><td>-10.61 <span class="muted">(n/a)</span></td><td>+6.36 <span class="muted">(n/a)</span></td></tr><tr><td>2026-11-10</td><td>+18.22 <span class="muted">(n/a)</span></td><td>-11.43 <span class="muted">(n/a)</span></td><td>+6.44 <span class="muted">(n/a)</span></td></tr><tr><td>2026-11-09</td><td>+17.20 <span class="muted">(n/a)</span></td><td>-10.42 <span class="muted">(n/a)</span></td><td>+5.67 <span class="muted">(n/a)</span></td></tr></tbody>
               </table>
             </details>
             
